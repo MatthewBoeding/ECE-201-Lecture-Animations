@@ -10,8 +10,6 @@ Requirements
 ### Module 2
 * Diode
 * Resistor Simplification
-### Module 3
-* Wheatstone Bridge Proof and Example
 ### Module 6
 * Max Power Transfer 
 * Norton Equivalent
@@ -24,7 +22,7 @@ Requirements
 ### Module 3
 * Delta-Wye Transform Proof
 * Delta-Wye Transform Example
-
+* Wheatstone Bridge Proof & Example
 
 ## Stretch Goals
 * Redo all lectures!
