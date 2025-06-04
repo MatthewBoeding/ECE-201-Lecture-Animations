@@ -100,16 +100,16 @@ class DeltaWyeExample(Slide):
             .rotate(90 * DEGREES)
             .shift(LEFT * 1.75 + UP * 2)
         )
-        r1100 = Resistor("1.1k", direction=DOWN).shift(DOWN * 2 + LEFT * 0.25)
+        r1100 = Resistor("3.3k", direction=DOWN).shift(DOWN * 2 + LEFT * 0.25)
         r4k2 = (
             Resistor("4k", direction=RIGHT)
             .rotate(90 * DEGREES)
             .shift(RIGHT * 1.25 + UP * 2)
         )
         r2k = Resistor("2k", direction=DOWN).shift(UP*.5)
-        r10k = Resistor("10k", direction=RIGHT).rotate(90 * DEGREES).shift(LEFT*1.75 + DOWN *.5)
+        r10k = Resistor("4.2k", direction=RIGHT).rotate(90 * DEGREES).shift(LEFT*1.75 + DOWN *.5)
         r6202 = (
-            Resistor(620, direction=RIGHT)
+            Resistor(900, direction=RIGHT)
             .rotate(90 * DEGREES)
             .shift(RIGHT * 1.25 + DOWN *.5)
         )
@@ -134,18 +134,16 @@ class DeltaWyeExample(Slide):
         circuit.add_wire(r10k.get_terminals("right"), r2k.get_terminals("left"))
         circuit.add_wire(r6202.get_terminals("left"), r1100.get_terminals("right"))
 
-        circuit.scale(.8)
+        circuit.scale(.8).shift(DOWN*1)
         self.add(circuit)
         self.wait()
         self.next_slide()
         test = VGroup()
         test.add(r4k1, r4k2, r2k)
         self.play(FadeToColor(test, color=RED))
-        for node, color in zip(
-            circuit.node_list, [WHITE, WHITE, RED, RED, RED, WHITE]
-        ):
-            self.play(node.animate.set_color(color))
-
+        self.play(circuit.node_list[2].animate.set_color(RED))
+        self.play(circuit.node_list[3].animate.set_color(RED))
+        self.play(circuit.node_list[4].animate.set_color(RED))
         self.next_slide()
 
         self.play(circuit.animate.scale(.8))
@@ -185,46 +183,62 @@ class DeltaWyeExample(Slide):
         fadeout = VGroup()
         fadeout.add(r1_eq, r2_eq, r3_eq, r1_val, r2_val, r3_val, known_vals)
         self.play(FadeOut(fadeout))
-
-        self.next_slide()
-
-        r270 = Resistor(270).shift(LEFT * 3.5 + UP*4)
-        r1 = Resistor("1.6k", direction=LEFT).rotate(270*DEGREES).shift(LEFT*1.75 + UP*3)
-        r2 = (
+        r2702 = Resistor(270).shift(LEFT * 3.5 + UP*4)
+        r12 = Resistor("1.6k", direction=LEFT).rotate(270*DEGREES).shift(LEFT*1.75 + UP*3)
+        r22 = (
             Resistor("800", direction=LEFT)
             .rotate(45 * DEGREES)
             .shift(LEFT * 2.5 + UP * 1.5)
         )
-        r3 = Resistor("800", direction=LEFT).rotate(135 * DEGREES).shift(UP * 1.5 +LEFT*1)
-        r1100 = Resistor("1.1k", direction=DOWN).shift(DOWN * 2 + LEFT * 1.25)
-        r10k = Resistor("10k", direction=RIGHT).rotate(90 * DEGREES).shift(LEFT*3 + DOWN *.5)
-        r6202 = (
-            Resistor(620, direction=RIGHT)
+        r32 = Resistor("800", direction=LEFT).rotate(135 * DEGREES).shift(UP * 1.5 +LEFT*1)
+        r11002 = Resistor("3.3k", direction=DOWN).shift(DOWN * 2 + LEFT * 1.75)
+        r10k2 = Resistor("4.2k", direction=RIGHT).rotate(90 * DEGREES).shift(LEFT*3 + DOWN *.5)
+        r62022 = (
+            Resistor(900, direction=RIGHT)
             .rotate(90 * DEGREES)
             .shift(LEFT*.25 + DOWN *.5)
         )
 
-        v20 = VoltageSource(20).shift(LEFT * 5+UP*.5)
+        v202 = VoltageSource(20).shift(LEFT * 5+UP*.5)
 
-        gnd = Ground(ground_type="ground").shift(LEFT * 5 + DOWN * 3)
+        gnd2 = Ground(ground_type="ground").shift(LEFT * 5 + DOWN * 3)
 
         # Add Circuit components.
-        circuit = Circuit()
-        circuit.add_components(r270, r1, r2, r3, r1100, r10k, r6202, v20, gnd)
+        circuit2 = Circuit()
+        circuit2.add_components(r2702, r12, r22, r32, r11002, r10k2, r62022, v202, gnd2)
 
         # A much streamline and easier way to edit.
-        circuit.add_wire(gnd.get_terminals(), v20.get_terminals("negative"))
-        circuit.add_wire(v20.get_terminals("negative"), r1100.get_terminals("left"))
-        circuit.add_wire(r10k.get_terminals("left"), r1100.get_terminals("left"))
-        circuit.add_wire(v20.get_terminals("positive"), r270.get_terminals("left"))
-        circuit.add_wire(r270.get_terminals("right"), r1.get_terminals("left"), invert = True)
-        circuit.add_wire(r1.get_terminals("right"), r2.get_terminals("right"))
-        circuit.add_wire(r1.get_terminals("right"), r3.get_terminals("right"))
-        line1 = Line(start= r2.get_terminals("left"), end = r10k.get_terminals("right"))
-        line2 = Line(start = r3.get_terminals("left"), end = r6202.get_terminals("right"))
-        circuit.add_wire(r6202.get_terminals("left"), r1100.get_terminals("right"))
-        circuit.add(line1, line2)
-        circuit.scale(.8).shift(DOWN*1)
-        self.add(circuit)
+        circuit2.add_wire(gnd2.get_terminals(), v202.get_terminals("negative"))
+        circuit2.add_wire(v202.get_terminals("negative"), r11002.get_terminals("left"))
+       
+        circuit2.add_wire(v202.get_terminals("positive"), r2702.get_terminals("left"))
+        circuit2.add_wire(r2702.get_terminals("right"), r12.get_terminals("left"), invert = True)
+        circuit2.add_wire(r12.get_terminals("right"), r22.get_terminals("right"))
+        circuit2.add_wire(r12.get_terminals("right"), r32.get_terminals("right"))
+        align10k = (r10k2.get_terminals("right") + r10k2.get_terminals("left")) / 2
+        r10k2.move_to([r22.get_terminals("left")[0]+.35, align10k[1], align10k[2]])
+        align6202 = (r62022.get_terminals("right") + r62022.get_terminals("left")) / 2
+        r62022.move_to([r32.get_terminals("left")[0]+.35, align6202[1], align6202[2]])
+        line1 = Line(start= r22.get_terminals("left"), end = r10k2.get_terminals("right"))
+        line2 = Line(start = r32.get_terminals("left"), end = r62022.get_terminals("right"))
+        circuit2.add_wire(r62022.get_terminals("left"), r11002.get_terminals("right"))
+        circuit2.add_wire(r10k2.get_terminals("left"), r11002.get_terminals("left"))
+        circuit2.add(line1, line2)
+        circuit2.scale(.8).shift(DOWN*1)
+        self.play(FadeIn(circuit2))
 
+        self.next_slide()
+        self.play(FadeOut(wye))
+        circuit.to_edge(RIGHT)
+        self.play(FadeIn(circuit))
+        self.next_slide()
+        self.play(FadeOut(circuit))
+        eq = MathTex(r"R_{eq} = 270+1.6k + (800+4.2k)||(800+900+3.3k)").scale(.6).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
+        self.play(Write(eq))
+        self.next_slide()
+        eq1 = MathTex(r"R_{eq} = 1870 + 5k || 5k = 4370\Omega").scale(.6).next_to(eq, DOWN, buff=.2).to_edge(RIGHT)
+        self.play(Write(eq1))
+        self.next_slide()
+        eq2 = MathTex(r"I_t = \frac{20}{4370} = \frac{2}{437} \approx 4.577mA").scale(.6).next_to(eq1, DOWN, buff=.2).to_edge(RIGHT)
+        self.play(Write(eq2))
         self.wait()
