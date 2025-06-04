@@ -6,6 +6,9 @@ Requirements
 * manim-circuit 
 * pyqt6
 *  Latex (miktek works well for windows)
+
+**NOTE:** There are some version conflicts with these packages. If you want to use manim-circuit, you'll need Python<3.13, but Python 3.12 has dependency issues with manim-editor. (Namely a dependency on skia-pathops-0.7.4, which only works on Python<=3.11) The above configuration works well enough for me. 
+
 ## TODO
 ### Module 2
 * Diode
