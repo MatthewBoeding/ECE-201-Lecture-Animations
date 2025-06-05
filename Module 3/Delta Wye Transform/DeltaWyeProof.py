@@ -319,7 +319,7 @@ class DeltaWyeProof(Slide):
         wye= WyeCreate()
         wye.shift(DOWN*3+RIGHT*1)
         self.play(FadeIn(wye))
-        self.play(wye.animate.scale(1.54))
+        self.play(wye.animate.scale(1.3))
  
         self.play(FadeOut(wye[wye_map["r2"]]))
         equ = MathTex(r"R_{n_1n_3} = R_1+R_3").to_corner(UL).shift(DOWN*4)
@@ -394,7 +394,7 @@ class DeltaWyeProof(Slide):
         moreEqus = VGroup()
         moreEqus.add(equ6,equ7,equ8)
         self.play(moreEqus.animate.scale(.5))
-        self.play(moreEqus.animate.to_corner(DR))
+        self.play(moreEqus.animate.to_edge(RIGHT))
         title = Text(r"Solving for Individual Resistors").to_edge(UP)
         
         self.next_slide()
@@ -444,7 +444,7 @@ class DeltaWyeProof(Slide):
         self.play(FadeIn(wyedelta))
         wd1 = MathTex(r"1) R_1R_2 = \frac{R_a^2R_bR_c}{(R_a+R_b+R_c)^2}").scale(.6).next_to(wyedelta, DOWN, buff=.2).to_edge(LEFT)
         wd2 = MathTex(r"2) R_1R_3 = \frac{R_aR_b^2R_c}{(R_a+R_b+R_c)^2}").scale(.6).next_to(wd1, DOWN, buff=.2)
-        wd3 = MathTex(r"3) R_1R_3 = \frac{R_aR_bR_c^2}{(R_a+R_b+R_c)^2}").scale(.6).next_to(wd2, DOWN, buff=.2)
+        wd3 = MathTex(r"3) R_2R_3 = \frac{R_aR_bR_c^2}{(R_a+R_b+R_c)^2}").scale(.6).next_to(wd2, DOWN, buff=.2)
         self.play(Write(wd1))
         self.play(Write(wd2))
         self.play(Write(wd3))
@@ -496,8 +496,8 @@ class DeltaWyeProof(Slide):
         self.play(wd7.animate.to_edge(LEFT))
         self.play(wd9.animate.next_to(wd7, RIGHT, buff=.5))
         self.play(wd11.animate.next_to(wd9, RIGHT, buff=.5))
-        delta = DeltaCreate().scale(.5).to_corner(DL)
-        wye= WyeCreate().scale(.6).to_corner(DR)
+        delta = DeltaCreate().scale(.5).to_corner(DL).shift(UP*1)
+        wye= WyeCreate().scale(.6).to_corner(DR).shift(UP*1)
         fadein = VGroup().add(delta,wye)
         self.play(FadeIn(fadein))
         # keep 7 9 and 11
