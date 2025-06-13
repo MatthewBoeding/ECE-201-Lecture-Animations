@@ -11,7 +11,6 @@ Requirements
 
 ## TODO
 ### Module 2
-* Diode
 * Resistor Simplification
 ### Module 6
 * Max Power Transfer 
@@ -22,6 +21,8 @@ Requirements
 ### Module 10
 * Semiconductors!
 ## Current Progress
+### Module 2
+* Diode
 ### Module 3
 * Delta-Wye Transform Proof
 * Delta-Wye Transform Example
