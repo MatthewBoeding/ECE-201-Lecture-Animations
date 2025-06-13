@@ -66,6 +66,9 @@ class Resistor(VMobject):
 
 class WheatstoneProof(Slide):
     def construct(self):
+        '''
+        SLIDE 1
+        '''
         bridge = VGroup()
         #Top Terminals are "right"
         title = Text(r"Wheatstone Bridge").scale(.8).to_edge(UP)
@@ -101,10 +104,18 @@ class WheatstoneProof(Slide):
         self.add(bridge, title)
         self.wait()
 
+        '''
+        SLIDE 2
+        '''
         self.next_slide()
         balance = Text(r"A Bridge is called balanced when").scale(.6).next_to(title, DOWN, buff=0.2).to_edge(RIGHT)
         balance2 = Text(r"Ammeter reads 0 Amps").scale(.6).next_to(balance, DOWN, buff=0.2).to_edge(RIGHT)
         self.play(Write(balance), Write(balance2))
+
+
+        '''
+        SLIDE 3
+        '''
         self.next_slide()
 
         self.play(FadeOut(bridge[1], bridge[2], bridge[3], bridge[4]))
@@ -119,22 +130,17 @@ class WheatstoneProof(Slide):
         arrlab = MathTex(r"I_A").scale(.6).next_to(arr, UP, buff=0.2)
         self.play(FadeIn(arr), FadeIn(arrlab))
 
+        '''
+        SLIDE 4
+        '''
         self.next_slide()
         self.play(FadeOut(balance), FadeOut(balance2))
-        '''
-        kcl = MathTex(r"KCL: \sum_{j=0}^n i_j = 0").scale(.8).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
-        self.play(Write(kcl))
-
-        self.next_slide()
-        kcla = MathTex(r"KCL\; Node\; a:").scale(.8).next_to(kcl, DOWN, buff=.2).to_edge(RIGHT)
-        kcla2 = MathTex(r"I_{R_1}+I_{R_3}+I_{A}= 0").scale(.8).next_to(kcla, DOWN, buff=.2).to_edge(RIGHT)
-        self.play(Write(kcla), Write(kcla2))
-        
-        self.next_slide()
-        '''
         kcla3 = Tex(r"If $I_A = 0$, then $V_a = V_b$!").scale(.6).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(kcla3))
 
+        '''
+        SLIDE 5
+        '''
         self.next_slide()
 
         vat = Tex(r"$V_a = \frac{R_1}{R_1+R_3}V$").scale(.6).next_to(kcla3, DOWN, buff=.2).to_edge(RIGHT)
@@ -144,6 +150,9 @@ class WheatstoneProof(Slide):
         vab = Tex(r"$\frac{R_1}{R_1+R_3}V = \frac{R_2}{R_2+R_4}V$").scale(.6).next_to(vbt, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(vab))
 
+        '''
+        SLIDE 6
+        '''
         self.next_slide()
 
         r4t = Tex(r"Simplify:").scale(.6).next_to(vab, DOWN, buff=.2).to_edge(RIGHT)
@@ -151,12 +160,18 @@ class WheatstoneProof(Slide):
         r4t2 = MathTex(r"\frac{R_3}{R_1} = \frac{R_4}{R_2}").scale(.6).next_to(r4t, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(r4t2))
 
+        '''
+        SLIDE 7
+        '''
         self.next_slide()
 
         rx = Tex(r"We can find one unkown resistor value!").scale(.6).next_to(r4t2, DOWN, buff=.2).to_edge(RIGHT)
         rx2 = Tex(r"Originally used in Ohm-meters.").scale(.6).next_to(rx, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(rx),Write(rx2))
 
+        '''
+        SLIDE 8
+        '''
         self.next_slide()
 
         self.play(FadeOut(kcla3), FadeOut(vat), FadeOut(vbt), FadeOut(vab), FadeOut(r4t), FadeOut(r4t2), FadeOut(arr), FadeOut(arrlab), FadeOut(linex))
@@ -166,6 +181,9 @@ class WheatstoneProof(Slide):
         self.play(FadeIn(Vlab))
         circuit.remove(circle)
 
+        '''
+        SLIDE 9
+        '''
         self.next_slide()
 
         vo.remove(vo.label)
@@ -185,6 +203,9 @@ class WheatstoneProof(Slide):
         app = Tex(r"What if we have a variable resistor? $R_4$").scale(.6).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app))
 
+        '''
+        SLIDE 10
+        '''
         self.next_slide()
 
         app2 = Tex(r"For the circuit to be balanced:").scale(.6).next_to(app, DOWN, buff=.2).to_edge(RIGHT)
@@ -196,6 +217,9 @@ class WheatstoneProof(Slide):
         app5 = MathTex(r"V_a = 15V\frac{540}{540+270} = 10V").scale(.6).next_to(app4, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app5))
 
+        '''
+        SLIDE 11
+        '''
         self.next_slide()
         
         self.play(FadeOut(app2), FadeOut(app3), FadeOut(app4), FadeOut(app5))
@@ -210,6 +234,9 @@ class WheatstoneProof(Slide):
         app6 = MathTex(r"V_b = 9V = \frac{2k}{2k+R_4}15V").scale(.6).next_to(app5, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app6))
 
+        '''
+        SLIDE 12
+        '''
         self.next_slide()
 
         app7 = MathTex(r"R_4 = \frac{15V}{9V}2k\Omega-2k\Omega").scale(.6).next_to(app6, DOWN, buff=.2).to_edge(RIGHT)

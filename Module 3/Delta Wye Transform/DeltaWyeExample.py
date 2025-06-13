@@ -87,6 +87,9 @@ def DeltaCreate():
 
 class DeltaWyeExample(Slide):
     def construct(self):
+        '''
+        SLIDE 1
+        '''
         # It is helpful to use a Numberplane() to help move the parts and place them appropriately.
         n = NumberPlane().set_opacity(0.5)
         #self.add(n)
@@ -137,13 +140,22 @@ class DeltaWyeExample(Slide):
         circuit.scale(.8).shift(DOWN*1)
         self.add(circuit)
         self.wait()
+
+        '''
+        SLIDE 2
+        '''
         self.next_slide()
+
         test = VGroup()
         test.add(r4k1, r4k2, r2k)
         self.play(FadeToColor(test, color=RED))
         self.play(circuit.node_list[2].animate.set_color(RED))
         self.play(circuit.node_list[3].animate.set_color(RED))
         self.play(circuit.node_list[4].animate.set_color(RED))
+        
+        '''
+        SLIDE 3
+        '''
         self.next_slide()
 
         self.play(circuit.animate.scale(.8))
@@ -151,7 +163,11 @@ class DeltaWyeExample(Slide):
         delta = DeltaCreate().scale(.75).to_edge(RIGHT).shift(DOWN*2)
         self.play(FadeIn(delta))
 
+        '''
+        SLIDE 4
+        '''
         self.next_slide()
+
         self.play(FadeOut(circuit))
         known_vals = MathTex(r"R_a = 4k\Omega \quad R_b = 4k\Omega \quad R_c = 2k").scale(.75).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
         
@@ -162,22 +178,37 @@ class DeltaWyeExample(Slide):
         r3_eq = MathTex(r"R_3 = \frac{R_bR_c}{R_a+R_b+R_c}").scale(.75).next_to(r2_eq, DOWN, buff=.2)
         self.play(FadeIn(r3_eq))
 
+        '''
+        SLIDE 5
+        '''
         self.next_slide()
+
         self.play(FadeIn(known_vals))
         r1_val = MathTex(r"R_1 = \frac{4k*4k}{4k+4k+2k} = \frac{16M}{10k}\Omega = 1.6k\Omega").scale(.75).next_to(r3_eq, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(r1_val))
+        
+        '''
+        SLIDE 6
+        '''
         self.next_slide()
+
         r2_val = MathTex(r"R_2 = \frac{4k*2k}{4k+4k+2k} = \frac{8M}{10k}\Omega = 0.8k\Omega").scale(.75).next_to(r1_val, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(r2_val))
         r3_val = MathTex(r"R_3 = \frac{4k*2k}{4k+4k+2k} = \frac{8M}{10k}\Omega = 0.8k\Omega").scale(.75).next_to(r2_val, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(r3_val))
 
+        '''
+        SLIDE 7
+        '''
         self.next_slide()
 
         wye = WyeCreate().to_corner(DR)
         self.play(FadeOut(delta))
         self.play(FadeIn(wye))
 
+        '''
+        SLIDE 8
+        '''
         self.next_slide()
 
         fadeout = VGroup()
@@ -227,18 +258,37 @@ class DeltaWyeExample(Slide):
         circuit2.scale(.8).shift(DOWN*1)
         self.play(FadeIn(circuit2))
 
+        '''
+        SLIDE 9
+        '''
         self.next_slide()
+
         self.play(FadeOut(wye))
         circuit.to_edge(RIGHT)
         self.play(FadeIn(circuit))
+        
+        '''
+        SLIDE 10
+        '''
         self.next_slide()
+
         self.play(FadeOut(circuit))
         eq = MathTex(r"R_{eq} = 270+1.6k + (800+4.2k)||(800+900+3.3k)").scale(.6).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(eq))
+        
+        '''
+        SLIDE 11
+        '''
         self.next_slide()
+
         eq1 = MathTex(r"R_{eq} = 1870 + 5k || 5k = 4370\Omega").scale(.6).next_to(eq, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(eq1))
+        
+        '''
+        SLIDE 12
+        '''
         self.next_slide()
+
         eq2 = MathTex(r"I_t = \frac{20}{4370} = \frac{2}{437} \approx 4.577mA").scale(.6).next_to(eq1, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(eq2))
         self.wait()
