@@ -15,14 +15,28 @@ def power_transfer_ratio():
     rs = np.linspace(2000, 2000, 50)
     rl = np.linspace(10, 10000, 50)
     x_vals = rl/rs
-    max = (20 / 16000) * 2000
-    power_max = np.linspace(max, max, 50)
-    curr_power = (20 / (rl+rs)*(rl+rs)) * rl
+    power_max = (20 /np.multiply((rs+rs),(rs+rs))) * rs
+    curr_power = (20 / np.multiply((rl+rs),(rl+rs))) * rl
     y_vals = curr_power / power_max
     return x_vals, y_vals
 
 class MaxPowerTransfer(Slide):
     def construct(self):
+        circuit = Circuit()
+        vo = VoltageSource(value = " ",label=False, dependent = False)
+        vo.remove(vo.label)
+        vo_lab = Tex(r"$V_{TH}$").next_to(vo, LEFT, buff=0.2)
+        rth = Resistor().next_to(vo, RIGHT, buff=0.5).shift(UP*1)
+        rl = Resistor().rotate(90*DEGREES).next_to(vo, RIGHT, buff=0.2).shift(RIGHT*3)
+        rth.remove(rth.label)
+        rl.remove(rl.label)
+        rth_lab = Tex(r"$R_{TH}$").next_to(rth, UP, buff=.2)
+        rl_lab = Tex(r"$R_L$").next_to(rl, RIGHT, buff=.2)
+        circuit.add(vo,rth,rl,rth_lab,rl_lab, vo_lab).scale(.6)
+        circuit.add_wire(vo.get_terminals("positive"), rth.get_terminals("left"))
+        circuit.add_wire(rth.get_terminals("right"), rl.get_terminals("right"), invert=True)
+        circuit.add_wire(rl.get_terminals("left"), vo.get_terminals("negative"), invert=True)
+
         axes = Axes(
             x_range=[0, 5, .5],
             y_range=[0,1,.1],
@@ -31,7 +45,7 @@ class MaxPowerTransfer(Slide):
             axis_config={"include_numbers": True},
             tips=False,
         )
-        axes.scale(.6)
+        axes.scale(.4)
         #axes_labels = axes.get_axis_labels(x_label="V", y_label="I")
 
         x_pow_eff, y_pow_eff = power_efficiency_plot()
@@ -49,6 +63,10 @@ class MaxPowerTransfer(Slide):
             line_color=BLUE,
             add_vertex_dots=False
         )
+
+        self.play(FadeIn(circuit))
+        self.next_slide
+        self.play(circuit.animate.to_edge(LEFT))
         self.play(FadeIn(axes))
         self.play(Create(graph))
         self.play(Create(graph2))

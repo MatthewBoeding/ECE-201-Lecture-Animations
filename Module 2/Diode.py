@@ -228,7 +228,7 @@ class DiodeLecture(Slide):
         v1.remove(v1.label)
         r2 = Resistor(" ").scale(.5).rotate(90*DEGREES).next_to(v1, DOWN, buff=0.25)
         r2.remove(r2.label)
-        vf = Tex(r"$V_F$").scale(.8).next_to(r2, RIGHT, buff=.2)
+        vf = Tex(r"$V_F$").scale(.8).next_to(v1, RIGHT, buff=.2)
         circuit2 = Circuit().add(v2,r3,v1,r2)
         circuit2.add_wire(v2.get_terminals("positive"),r3.get_terminals("left"))
         circuit2.add_wire(r2.get_terminals("right"), v1.get_terminals("negative"))

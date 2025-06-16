@@ -198,12 +198,19 @@ def DeltaCreate():
 class DeltaWyeProof(Slide):
     def construct(self):
  
+        '''
+        SLIDE 1
+        '''
         # It is helpful to use a Numberplane() to help move the parts and place them appropriately.
         n = NumberPlane(y_range=(-4,4.0,1)).set_opacity(0.25)
         self.add(n)
         self.wait()
         title = Text(r"Delta-Wye Transform", font_size=48).to_edge(UP)
         self.play(Write(title))
+        
+        '''
+        SLIDE 2
+        '''
         self.next_slide()
  
  
@@ -216,6 +223,9 @@ class DeltaWyeProof(Slide):
         self.play(FadeIn(delta))
         self.wait()
  
+        '''
+        SLIDE 3
+        '''
         self.next_slide()
  
         transform = Arrow(buff=2.2, start = 1.2*LEFT, end = 2*RIGHT, color = RED)
@@ -225,6 +235,10 @@ class DeltaWyeProof(Slide):
         wye.shift(RIGHT*3)
         self.play(FadeIn(wye))
         self.play(Create(transform))
+        
+        '''
+        SLIDE 4
+        '''
         self.next_slide()
  
  
@@ -240,6 +254,10 @@ class DeltaWyeProof(Slide):
         self.play(Create(r13))
         self.play(Create(line1))
         self.play(Create(line2))
+        
+        '''
+        SLIDE 5
+        '''
         self.next_slide()
  
  
@@ -255,6 +273,10 @@ class DeltaWyeProof(Slide):
         r13dup.scale(.8)
         r13dup.shift(RIGHT*1,DOWN*.5)
         self.play(Create(r13dup))
+        
+        '''
+        SLIDE 6
+        '''
         self.next_slide()
  
  
@@ -262,6 +284,10 @@ class DeltaWyeProof(Slide):
         self.play(FadeOut(wye))
         self.play(delta.animate.shift(RIGHT*6))
         self.play(delta.animate.scale(1.54))
+        
+        '''
+        SLIDE 7
+        '''
         self.next_slide()
  
  
@@ -269,12 +295,20 @@ class DeltaWyeProof(Slide):
         self.play(Uncreate(title))
         self.play(Write(equ))
         self.wait()
+        
+        '''
+        SLIDE 8
+        '''
         self.next_slide()
  
  
         equ1 = MathTex(r"R_{n_1n_3}= \frac{R_b(R_a+R_c)}{R_a+R_b+R_c}").to_corner(UL).shift(DOWN*1)
         self.play(Write(equ1))
         self.wait()
+        
+        '''
+        SLIDE 9
+        '''
         self.next_slide()
         self.play(Uncreate(equ))
         self.play(equ1.animate.scale(.5))
@@ -285,10 +319,17 @@ class DeltaWyeProof(Slide):
         self.play(delta[delta_map["node1"]].animate.scale(2))
         equ= MathTex(r"R_{n_1n_2} = R_a || (R_b + R_c)").to_corner(UL).shift(DOWN*1)
         self.play(Write(equ))
+        
+        '''
+        SLIDE 10
+        '''
         self.next_slide()
         equ2= MathTex(r"R_{n_1n_2} = \frac{R_a(R_b + R_c)}{R_a+R_b+R_c}").next_to(equ, DOWN, buff=.2)
         self.play(Write(equ2))
  
+        '''
+        SLIDE 11
+        '''
         self.next_slide()
  
         self.play(Uncreate(equ))
@@ -301,10 +342,17 @@ class DeltaWyeProof(Slide):
         self.play(delta[delta_map["node3"]].animate.scale(2))
         equ= MathTex(r"R_{n_2n_3} = R_c || (R_a + R_b)").next_to(equ2, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(equ))
+        
+        '''
+        SLIDE 12
+        '''
         self.next_slide()
         equ3= MathTex(r"R_{n_2n_3} = \frac{R_c(R_a + R_b)}{R_a+R_b+R_c}").next_to(equ, DOWN, buff=.2)
         self.play(Write(equ3))
  
+        '''
+        SLIDE 13
+        '''
         self.next_slide()
  
         self.play(Uncreate(equ))
@@ -313,6 +361,9 @@ class DeltaWyeProof(Slide):
         delta[delta_map["node3"]].set_color(WHITE).scale(.5)
         delta[delta_map["node2"]].set_color(WHITE).scale(.5)
  
+        '''
+        SLIDE 14
+        '''
         self.next_slide()
  
         self.play(FadeOut(delta))
@@ -325,7 +376,12 @@ class DeltaWyeProof(Slide):
         equ = MathTex(r"R_{n_1n_3} = R_1+R_3").to_corner(UL).shift(DOWN*4)
  
         self.play(Create(equ))
+        
+        '''
+        SLIDE 15
+        '''
         self.next_slide()
+
         self.add(wye[wye_map["r2"]])
         self.play(equ.animate.scale(.5))
         self.play(equ.animate.next_to(equ3, DOWN, buff=.2))
@@ -334,6 +390,9 @@ class DeltaWyeProof(Slide):
         equ4 = MathTex(r"R_{n_1n_2} = R_1+R_2").to_corner(UL).shift(DOWN*5)
         self.play(Create(equ4))
         
+        '''
+        SLIDE 16
+        '''
         self.next_slide()
  
         self.add(wye[wye_map["r3"]])
@@ -344,6 +403,9 @@ class DeltaWyeProof(Slide):
         equ5 = MathTex(r"R_{n_2n_3} = R_2+R_3").to_corner(UL).shift(DOWN*6)
         self.play(Create(equ5))
 
+        '''
+        SLIDE 17
+        '''
         self.next_slide()
 
         self.add(wye[wye_map["r1"]])
@@ -354,6 +416,9 @@ class DeltaWyeProof(Slide):
         wyeEqu.add(equ, equ4, equ5)
         deltaEqu.add(equ1, equ2, equ3)
 
+        '''
+        SLIDE 18
+        '''
         self.next_slide()
 
         self.play(FadeOut(wye))
@@ -365,6 +430,9 @@ class DeltaWyeProof(Slide):
         equ7 = MathTex(r"Eq. 2: R_1+R_3 = \frac{R_b(R_a + R_c)}{R_a+R_b+R_c}").to_corner(DR).shift(UP*1.5)
         equ8 = MathTex(r"Eq. 3: R_2+R_3 = \frac{R_c(R_a + R_b)}{R_a+R_b+R_c}").to_corner(DR)
 
+        '''
+        SLIDE 19
+        '''
         self.next_slide()
 
         self.play(equ1.animate.set_color(RED))
@@ -373,6 +441,9 @@ class DeltaWyeProof(Slide):
         self.play(FadeOut(equ1))
         self.play(FadeOut(equ))
 
+        '''
+        SLIDE 20
+        '''
         self.next_slide()
 
         self.play(equ2.animate.set_color(RED))
@@ -381,6 +452,9 @@ class DeltaWyeProof(Slide):
         self.play(FadeOut(equ2))
         self.play(FadeOut(equ4))
         
+        '''
+        SLIDE 21
+        '''
         self.next_slide()
 
         self.play(equ3.animate.set_color(RED))
@@ -389,6 +463,9 @@ class DeltaWyeProof(Slide):
         self.play(FadeOut(equ3))
         self.play(FadeOut(equ5))
         
+        '''
+        SLIDE 22
+        '''
         self.next_slide()
 
         moreEqus = VGroup()
@@ -397,6 +474,9 @@ class DeltaWyeProof(Slide):
         self.play(moreEqus.animate.to_edge(RIGHT))
         title = Text(r"Solving for Individual Resistors").to_edge(UP)
         
+        '''
+        SLIDE 23
+        '''
         self.next_slide()
 
         self.play(Write(title))
@@ -407,6 +487,9 @@ class DeltaWyeProof(Slide):
         solve2 = MathTex(r"R_1 = \frac{R_aR_b}{R_a+R_b+R_c}").scale(.75).next_to(solve, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(solve2))
 
+        '''
+        SLIDE 24
+        '''
         self.next_slide()
 
         instr2 = Text(r"Eq. 1 + Eq. 3 - Eq. 2").scale(.75).next_to(solve2, DOWN, buff=.2).to_edge(LEFT)
@@ -416,6 +499,9 @@ class DeltaWyeProof(Slide):
         solv2 = MathTex(r"R_2 = \frac{R_aR_c}{R_a+R_b+R_c}").scale(.75).next_to(solv1, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(solv2))
 
+        '''
+        SLIDE 25
+        '''
         self.next_slide()
 
         instr3 = Text(r"Eq. 2 + Eq. 3 - Eq. 1").scale(.75).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
@@ -425,6 +511,9 @@ class DeltaWyeProof(Slide):
         solv4 = MathTex(r"R_3 = \frac{R_bR_c}{R_a+R_b+R_c}").scale(.75).next_to(solv3, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(solv4))
 
+        '''
+        SLIDE 26
+        '''
         self.next_slide()
 
         fadeout = VGroup()
@@ -437,6 +526,9 @@ class DeltaWyeProof(Slide):
         self.play(solv2.animate.next_to(instructions, DOWN, buff=.2))
         self.play(solv4.animate.next_to(solv2, RIGHT, buff=1))
         
+        '''
+        SLIDE 27
+        '''
         self.next_slide()
 
         self.play(FadeOut(moreEqus))
@@ -449,24 +541,41 @@ class DeltaWyeProof(Slide):
         self.play(Write(wd2))
         self.play(Write(wd3))
         
+        '''
+        SLIDE 28
+        '''
         self.next_slide()
 
         wd4 = MathTex(r"1)+2)+3) = R_1R_2+R_1R_3+R_2R_3 = \frac{R_a^2R_bR_c+R_aR_b^2R_c+R_aR_bR_c^2}{(R_a+R_b+R_c)^2}").scale(.6).next_to(wd1, RIGHT, buff=.5)
         self.play(Write(wd4))
         
+        '''
+        SLIDE 29
+        '''
         self.next_slide()
         
         wd5 = MathTex(r"R_1R_2+R_1R_3+R_2R_3 = \frac{R_aR_bR_c(R_a+R_b+R_c)}{(R_a+R_b+R_c)^2} = \frac{R_aR_bR_c}{R_a+R_b+R_c}").scale(.6).next_to(wd4, DOWN, buff=.5)
         self.play(Write(wd5))
         
+        '''
+        SLIDE 30
+        '''
         self.next_slide()
+
         wd6 = MathTex(r"R_1R_2+R_1R_3+R_2R_3 = R_a\frac{R_bR_c}{R_a+R_b+R_c} = R_aR_3").scale(.6).next_to(wd5, DOWN, buff=.5)
         self.play(Write(wd6))
         
+        '''
+        SLIDE 31
+        '''
         self.next_slide()
+
         wd7 = MathTex(r"Ra = \frac{R_1R_2+R_1R_3+R_2R_3}{R_3}").scale(.6).next_to(wd6, DOWN, buff=.5)
         self.play(Write(wd7))
 
+        '''
+        SLIDE 32
+        '''
         self.next_slide()
         
         fadeout = VGroup()
@@ -482,12 +591,18 @@ class DeltaWyeProof(Slide):
         self.play(Write(wd8))
         self.play(Write(wd9))
         
+        '''
+        SLIDE 33
+        '''
         self.next_slide()
 
         self.play(Write(wd10))
         self.play(Write(wd11))
 
 
+        '''
+        SLIDE 34
+        '''
         self.next_slide()
 
         fadeout = VGroup()
