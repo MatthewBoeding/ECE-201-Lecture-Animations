@@ -118,14 +118,12 @@ class DeltaWyeExample(Slide):
         )
         v20 = VoltageSource(20).shift(LEFT * 5+UP*.5)
 
-        gnd = Ground(ground_type="ground").shift(LEFT * 5 + DOWN * 3)
 
         # Add Circuit components.
         circuit = Circuit()
-        circuit.add_components(r270, r4k1, r4k2, r2k, r1100, r10k, r6202, v20, gnd)
+        circuit.add_components(r270, r4k1, r4k2, r2k, r1100, r10k, r6202, v20)
 
         # A much streamline and easier way to edit.
-        circuit.add_wire(gnd.get_terminals(), v20.get_terminals("negative"))
         circuit.add_wire(v20.get_terminals("negative"), r1100.get_terminals("left"))
         circuit.add_wire(r10k.get_terminals("left"), r1100.get_terminals("left"))
         circuit.add_wire(v20.get_terminals("positive"), r270.get_terminals("left"))
@@ -137,7 +135,7 @@ class DeltaWyeExample(Slide):
         circuit.add_wire(r10k.get_terminals("right"), r2k.get_terminals("left"))
         circuit.add_wire(r6202.get_terminals("left"), r1100.get_terminals("right"))
 
-        circuit.scale(.8).shift(DOWN*1)
+        circuit.scale(.8).shift(DOWN*.5)
         self.add(circuit)
         self.wait()
 
@@ -160,7 +158,7 @@ class DeltaWyeExample(Slide):
 
         self.play(circuit.animate.scale(.8))
         self.play(circuit.animate.to_edge(LEFT))
-        delta = DeltaCreate().scale(.75).to_edge(RIGHT).shift(DOWN*2)
+        delta = DeltaCreate().scale(.6).to_edge(RIGHT).shift(DOWN*1.5)
         self.play(FadeIn(delta))
 
         '''
@@ -169,13 +167,13 @@ class DeltaWyeExample(Slide):
         self.next_slide()
 
         self.play(FadeOut(circuit))
-        known_vals = MathTex(r"R_a = 4k\Omega \quad R_b = 4k\Omega \quad R_c = 2k").scale(.75).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
+        known_vals = MathTex(r"R_a = 4k\Omega \quad R_b = 4k\Omega \quad R_c = 2k").scale(.6).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
         
-        r1_eq = MathTex(r"R_1 = \frac{R_aR_b}{R_a+R_b+R_c}").scale(.75).next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        r1_eq = MathTex(r"R_1 = \frac{R_aR_b}{R_a+R_b+R_c}").scale(.6).next_to(title, DOWN, buff=.2).to_edge(LEFT)
         self.play(FadeIn(r1_eq))
-        r2_eq = MathTex(r"R_2 = \frac{R_aR_c}{R_a+R_b+R_c}").scale(.75).next_to(r1_eq, DOWN, buff=.2)
+        r2_eq = MathTex(r"R_2 = \frac{R_aR_c}{R_a+R_b+R_c}").scale(.6).next_to(r1_eq, DOWN, buff=.2)
         self.play(FadeIn(r2_eq))
-        r3_eq = MathTex(r"R_3 = \frac{R_bR_c}{R_a+R_b+R_c}").scale(.75).next_to(r2_eq, DOWN, buff=.2)
+        r3_eq = MathTex(r"R_3 = \frac{R_bR_c}{R_a+R_b+R_c}").scale(.6).next_to(r2_eq, DOWN, buff=.2)
         self.play(FadeIn(r3_eq))
 
         '''
@@ -184,7 +182,7 @@ class DeltaWyeExample(Slide):
         self.next_slide()
 
         self.play(FadeIn(known_vals))
-        r1_val = MathTex(r"R_1 = \frac{4k*4k}{4k+4k+2k} = \frac{16M}{10k}\Omega = 1.6k\Omega").scale(.75).next_to(r3_eq, DOWN, buff=.2).to_edge(LEFT)
+        r1_val = MathTex(r"R_1 = \frac{4k*4k}{4k+4k+2k} = \frac{16M}{10k}\Omega = 1.6k\Omega").scale(.6).next_to(r3_eq, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(r1_val))
         
         '''
@@ -192,9 +190,9 @@ class DeltaWyeExample(Slide):
         '''
         self.next_slide()
 
-        r2_val = MathTex(r"R_2 = \frac{4k*2k}{4k+4k+2k} = \frac{8M}{10k}\Omega = 0.8k\Omega").scale(.75).next_to(r1_val, DOWN, buff=.2).to_edge(LEFT)
+        r2_val = MathTex(r"R_2 = \frac{4k*2k}{4k+4k+2k} = \frac{8M}{10k}\Omega = 0.8k\Omega").scale(.6).next_to(r1_val, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(r2_val))
-        r3_val = MathTex(r"R_3 = \frac{4k*2k}{4k+4k+2k} = \frac{8M}{10k}\Omega = 0.8k\Omega").scale(.75).next_to(r2_val, DOWN, buff=.2).to_edge(LEFT)
+        r3_val = MathTex(r"R_3 = \frac{4k*2k}{4k+4k+2k} = \frac{8M}{10k}\Omega = 0.8k\Omega").scale(.6).next_to(r2_val, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(r3_val))
 
         '''
@@ -202,7 +200,7 @@ class DeltaWyeExample(Slide):
         '''
         self.next_slide()
 
-        wye = WyeCreate().to_corner(DR)
+        wye = WyeCreate().to_corner(DR).shift(UP*1.5)
         self.play(FadeOut(delta))
         self.play(FadeIn(wye))
 
@@ -232,14 +230,13 @@ class DeltaWyeExample(Slide):
 
         v202 = VoltageSource(20).shift(LEFT * 5+UP*.5)
 
-        gnd2 = Ground(ground_type="ground").shift(LEFT * 5 + DOWN * 3)
 
         # Add Circuit components.
         circuit2 = Circuit()
-        circuit2.add_components(r2702, r12, r22, r32, r11002, r10k2, r62022, v202, gnd2)
+        circuit2.add_components(r2702, r12, r22, r32, r11002, r10k2, r62022, v202)
 
         # A much streamline and easier way to edit.
-        circuit2.add_wire(gnd2.get_terminals(), v202.get_terminals("negative"))
+
         circuit2.add_wire(v202.get_terminals("negative"), r11002.get_terminals("left"))
        
         circuit2.add_wire(v202.get_terminals("positive"), r2702.get_terminals("left"))
@@ -255,7 +252,7 @@ class DeltaWyeExample(Slide):
         circuit2.add_wire(r62022.get_terminals("left"), r11002.get_terminals("right"))
         circuit2.add_wire(r10k2.get_terminals("left"), r11002.get_terminals("left"))
         circuit2.add(line1, line2)
-        circuit2.scale(.8).shift(DOWN*1)
+        circuit2.scale(.8).shift(DOWN*.5)
         self.play(FadeIn(circuit2))
 
         '''

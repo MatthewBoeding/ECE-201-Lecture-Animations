@@ -65,7 +65,8 @@ class MaxPowerTransfer(Slide):
         )
 
         self.play(FadeIn(circuit))
-        self.next_slide
+        self.next_slide()
+        
         self.play(circuit.animate.to_edge(LEFT))
         self.play(FadeIn(axes))
         self.play(Create(graph))
