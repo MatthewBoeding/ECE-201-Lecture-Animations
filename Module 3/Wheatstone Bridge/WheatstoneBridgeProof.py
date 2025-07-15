@@ -143,11 +143,11 @@ class WheatstoneProof(Slide):
         '''
         self.next_slide()
 
-        vat = Tex(r"$V_a = \frac{R_1}{R_1+R_3}V$").scale(.6).next_to(kcla3, DOWN, buff=.2).to_edge(RIGHT)
-        vbt = Tex(r"$V_b = \frac{R_2}{R_2+R_4}V$").scale(.6).next_to(vat, DOWN, buff=.2).to_edge(RIGHT)
+        vat = Tex(r"$V_a = \frac{R_3}{R_1+R_3}V$").scale(.6).next_to(kcla3, DOWN, buff=.2).to_edge(RIGHT)
+        vbt = Tex(r"$V_b = \frac{R_4}{R_2+R_4}V$").scale(.6).next_to(vat, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(vat))
         self.play(Write(vbt))
-        vab = Tex(r"$\frac{R_1}{R_1+R_3}V = \frac{R_2}{R_2+R_4}V$").scale(.6).next_to(vbt, DOWN, buff=.2).to_edge(RIGHT)
+        vab = Tex(r"$\frac{R_3}{R_1+R_3}V = \frac{R_4}{R_2+R_4}V$").scale(.6).next_to(vbt, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(vab))
 
         '''
@@ -214,7 +214,7 @@ class WheatstoneProof(Slide):
         self.play(Write(app3))
         app4 = MathTex(r"\frac{270}{540} = \frac{R_4}{2k} \rightarrow R_4 = 1k\Omega").scale(.6).next_to(app3, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app4))
-        app5 = MathTex(r"V_a = 15V\frac{540}{540+270} = 10V").scale(.6).next_to(app4, DOWN, buff=.2).to_edge(RIGHT)
+        app5 = MathTex(r"V_a = 15V\frac{270}{540+270} = 5V").scale(.6).next_to(app4, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app5))
 
         '''
@@ -223,15 +223,15 @@ class WheatstoneProof(Slide):
         self.next_slide()
         
         self.play(FadeOut(app2), FadeOut(app3), FadeOut(app4), FadeOut(app5))
-        app2 = Tex(r"$V_a = 10V$").scale(.6).next_to(app, DOWN, buff=.2).to_edge(RIGHT)
+        app2 = Tex(r"$V_a = 5V$").scale(.6).next_to(app, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app2))
         app3 = Tex(r"What if $V_{ab} = 1V$?").scale(.6).next_to(app2, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app3))
         app4 = MathTex(r"V_{ab}=V_a-V_b ").scale(.6).next_to(app3, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app4))
-        app5 = MathTex(r"1V = 10V - V_b").scale(.6).next_to(app4, DOWN, buff=.2).to_edge(RIGHT)
+        app5 = MathTex(r"1V = 5V - V_b").scale(.6).next_to(app4, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app5))
-        app6 = MathTex(r"V_b = 9V = \frac{2k}{2k+R_4}15V").scale(.6).next_to(app5, DOWN, buff=.2).to_edge(RIGHT)
+        app6 = MathTex(r"V_b = 4V = \frac{R4}{2k+R_4}15V").scale(.6).next_to(app5, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app6))
 
         '''
@@ -239,8 +239,8 @@ class WheatstoneProof(Slide):
         '''
         self.next_slide()
 
-        app7 = MathTex(r"R_4 = \frac{15V}{9V}2k\Omega-2k\Omega").scale(.6).next_to(app6, DOWN, buff=.2).to_edge(RIGHT)
+        app7 = MathTex(r"R_4 = \frac{15V}{4V}2k\Omega-2k\Omega").scale(.6).next_to(app6, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app7))
-        app8 = MathTex(r"R_4 = \frac{4}{3}k\Omega").scale(.6).next_to(app7, DOWN, buff=.2).to_edge(RIGHT)
+        app8 = MathTex(r"R_4 = \frac{8}{11}k\Omega").scale(.6).next_to(app7, DOWN, buff=.2).to_edge(RIGHT)
         self.play(Write(app8))
         self.wait()
