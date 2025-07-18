@@ -132,10 +132,11 @@ class RCCircuitSlides(Slide):
         self.play(Write(discharge_label))
         self.play(Create(discharge_curve), run_time=3)
         self.wait()
-        
+        self.next_slide()
         '''
         slide
         '''
+        self.play(FadeOut(discharge_curve), FadeOut(charging_curve), FadeOut(discharge_label), FadeOut(charging_label))
         # New initial voltage
         V_0 = 2  # Starting voltage for both charge and discharge
 
@@ -147,7 +148,7 @@ class RCCircuitSlides(Slide):
         )
         charging_from_2_label = MathTex(
             r"V_c(t) = 2 + (V_s - 2)(1 - e^{-t/RC})"
-        ).next_to(discharge_label, DOWN)
+        ).to_edge(UP)
 
         self.play(Write(charging_from_2_label))
         self.play(Create(charging_from_2), run_time=3)
