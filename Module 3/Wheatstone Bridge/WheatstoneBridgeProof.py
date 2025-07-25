@@ -64,7 +64,7 @@ class Resistor(VMobject):
  
         return self
 
-class WheatstoneProof(Slide):
+class WheatstoneBridgeProof(Slide):
     def construct(self):
         '''
         SLIDE 1
