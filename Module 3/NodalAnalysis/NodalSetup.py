@@ -89,7 +89,9 @@ class NodalSetup(Slide):
         
         self.next_slide()
         circuit.add(gnd)
-        grp = VGroup().add(circuit, nodea, nodeb, nodec).scale(.6).to_edge(RIGHT)
+        grp = VGroup().add(circuit, nodea, nodeb, nodec)
+        self.play(grp.animate.scale(.6))
+        self.play(grp.animate.to_edge(RIGHT))
         step4.next_to(title,DOWN,buff=0.2)
         self.play(Transform(step3, step4))
         queue = Tex(r"C=3-1=2").next_to(step3, DOWN, buff=0.2).to_edge(LEFT)
@@ -121,3 +123,153 @@ class NodalSetup(Slide):
         self.play(Write(kcleq3))
         self.play(Write(kcleq4))
         self.play(Write(kcleq5))
+
+        self.next_slide()
+        self.play( *[FadeOut(mob)for mob in self.mobjects])
+        # Place the components down first. Then, connect with wires later.
+        title = Tex(r"Supernodes").to_edge(UP)
+        self.play(Write(title))
+
+        r270 = Resistor("2.5k").shift(LEFT * 3.25 + UP)
+        r10000 = (
+            Resistor("10k", direction=RIGHT)
+            .rotate(90 * DEGREES)
+            .shift(LEFT * 1.75 + DOWN * 0.5)
+        )
+        r1100 = Resistor("1k", direction=DOWN).shift(DOWN * 2 + LEFT * 0.25)
+        r620 = (
+            Resistor("5k", direction=RIGHT)
+            .rotate(90 * DEGREES)
+            .shift(RIGHT * 1.25 + DOWN * 0.5)
+        )
+        r430 = Resistor("2.5k").shift(RIGHT * 2.75 + UP)
+        r360 = (
+            Resistor("1.25k", direction=LEFT)
+            .shift(RIGHT * 6 + DOWN * 0.5)
+            .rotate(90 * DEGREES)
+        )
+        r5600 = Resistor("5k").shift(UP * 3)
+        v20 = VoltageSource(20).shift(LEFT * 5 + DOWN * 0.5)
+
+        # You can rotate the voltage sources and move them.
+        v10 = VoltageSource(10, direction=UP).rotate(-90 * DEGREES).shift(UP)
+        v16 = VoltageSource(16, direction=LEFT).shift(RIGHT * 4 + DOWN * 0.5)
+        gnd = Ground(ground_type="ground").shift(LEFT * 5 + DOWN * 2)
+
+        # Add Circuit components.
+        circuit = Circuit()
+        circuit.add_components(v20, v16, v10, r270, r10000, r1100, r620, r430, r360, r5600,gnd)
+
+        # A much streamline and easier way to edit.
+        circuit.add_wire(gnd.get_terminals(), v20.get_terminals("negative"))
+        circuit.add_wire(v20.get_terminals("negative"), r1100.get_terminals("left"))
+        circuit.add_wire(r10000.get_terminals("left"), r1100.get_terminals("left"))
+        circuit.add_wire(v20.get_terminals("positive"), r5600.get_terminals("left"))
+        circuit.add_wire(v20.get_terminals("positive"), r270.get_terminals("left"))
+        circuit.add_wire(r10000.get_terminals("right"), r270.get_terminals("right"))
+        circuit.add_wire(r10000.get_terminals("right"), v10.get_terminals("negative"))
+        circuit.add_wire(r620.get_terminals("right"), v10.get_terminals("positive"))
+
+        # you can invert the direction of the wire. Vertical first, or horizontal first.
+        circuit.add_wire(r430.get_terminals("left"), r620.get_terminals("right"), invert=True)
+        circuit.add_wire(r1100.get_terminals("right"),r360.get_terminals("left"), invert=True)
+        circuit.add_wire(v16.get_terminals("negative"),r1100.get_terminals("right"))
+
+        # You can also custom define wires to have better control with how the junctions are generated
+        circuit.add_wire(r620.get_terminals("left"), r620.get_terminals("left") + DOWN*(r620.get_terminals("left")[1] - r1100.get_terminals("right")), invert=True)
+
+        # The order in which the wires are added matters.
+        circuit.add_wire(r5600.get_terminals("right"), r360.get_terminals("right"), invert=True)
+        circuit.add_wire(r430.get_terminals("right"), r360.get_terminals("right"), invert=True)
+        circuit.add_wire(v16.get_terminals("positive"), r430.get_terminals("right"))
+        circuit.scale(.8)
+
+        self.play(FadeIn(circuit),FadeOut(gnd))
+        self.wait()
+
+        self.next_slide()
+        # Automatic node detection
+        for node, color in zip(
+            circuit.node_list, [BLUE, RED, ORANGE, YELLOW, GREEN, PURPLE]
+        ):
+            self.play(node.animate.set_color(color))
+        self.wait()
+
+        self.next_slide()
+        coords = gnd.get_terminals()
+        gnd = Ground(ground_type="ground").scale(.8).move_to(coords+[0,-.5,0])
+        lin = Line(gnd.get_terminals(), v20.get_terminals("negative"))
+        self.play(FadeIn(gnd),FadeIn(lin))
+        self.play(circuit.node_list[0].animate.set_color(WHITE))
+        circuit.add(gnd, lin)
+
+        self.next_slide()
+        self.play(circuit.animate.scale(.75))
+        self.play(circuit.animate.to_edge(RIGHT))
+        step1 = Tex(r"$\bullet$ Identify all nodes and reference node (ground)").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Write(step1))
+        nodea = Tex(r"$a$").scale(.65).next_to(r270, UP, buff = .02).shift(LEFT*1.5)
+        nodeb = Tex(r"$b$").scale(.65).next_to(r270, UP, buff = .02).shift(RIGHT*.75)
+        nodec = Tex(r"$c$").scale(.65).next_to(r430, UP, buff = .02).shift(LEFT*.75)
+        noded = Tex(r"$d$").scale(.65).next_to(r430, UP, buff = .02).shift(RIGHT*.75)
+        nodee = Tex(r"$e$").scale(.65).next_to(r1100, UP, buff = .02).shift(RIGHT*1.5)
+        self.next_slide()
+
+        
+
+        step2 = Tex(r"$\bullet$ Count remaining nodes (N)").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Transform(step1, step2))
+        self.play(Create(nodea), Create(nodeb),Create(nodec),Create(noded),Create(nodee))
+        nodes = Tex(r"$N=5$").next_to(step2, DOWN, buff = .2).to_edge(LEFT)
+        self.play(Write(nodes))
+
+        self.next_slide()
+
+        step3 = Tex(r"$\bullet$ Count Voltage Sources (M)").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Transform(step1, step3))
+        supps = Tex(r"$M=3$").next_to(nodes, DOWN, buff = .2).to_edge(LEFT)
+        self.play(Write(supps))
+
+        self.next_slide()
+        step4 = Tex(r"$\bullet$ Complexity C = N-M").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Transform(step1, step4))
+        comp = Tex(r"$ C = 5-3 = 2$").next_to(supps, DOWN, buff = .2).to_edge(LEFT)
+        self.play(Write(comp))
+        
+        self.next_slide()
+
+        step5 = Tex(r"$\bullet$ Solve C simulatneous equations").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Transform(step1, step5))
+        self.play(Transform(nodea, Tex(r"$V_a=20V$").scale(.5).move_to(nodea.get_center())))
+        self.play(FadeOut(nodes), FadeOut(supps), comp.animate.next_to(step1, DOWN, buff=.2))
+        for node, color in zip(
+            circuit.node_list, [BLUE, RED, ORANGE, YELLOW, GREEN, PURPLE]
+        ):
+           node.set_color(WHITE)
+        
+        dist = v10.get_terminals("negative") - v10.get_terminals("positive")
+        cent = v10.get_center()
+        circ = Circle(radius=dist[0]).move_to(cent)
+        dist16 = v16.get_terminals("positive") - v16.get_terminals("negative")
+        cent16 = v16.get_center()
+        circ16 = Circle(radius=dist16[1]).move_to(cent16)
+
+        self.play(Create(circ), Create(circ16))
+        self.next_slide()
+
+        supernode = Tex(r"Supernodes! Source between 2\\n nodes without reference").scale(.6).next_to(comp, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Write(supernode))
+        vc = Tex(r"$V_{cb} = 10V$").scale(.75).next_to(supernode, DOWN, buff=.2).to_edge(LEFT)
+        vc2 = Tex(r"$V_c - V_b = 10V$").scale(.75).next_to(vc, DOWN, buff=.2).to_edge(LEFT)
+        vc3 = Tex(r"$V_c = V_b + 10V$").scale(.75).next_to(vc2, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Write(vc))
+        self.play(Write(vc2))
+        self.play(Write(vc3))
+
+        self.next_slide()
+        self.play(Transform(nodec, Tex(r"$V_b + 10V$").scale(.5).move_to(nodec.get_center()+[.25,.25,0])), FadeOut(circ))
+
+        self.next_slide()
+        vd = Tex(r"Likewise: $V_d = V_e + 16V$").scale(.75).next_to(vc3, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Write(vd))
+        self.play(Transform(noded, Tex(r"$V_e + 16V$").scale(.5).move_to(noded.get_center()+[.5,.25,0])), FadeOut(circ16))
