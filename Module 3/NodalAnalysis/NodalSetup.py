@@ -240,7 +240,7 @@ class NodalSetup(Slide):
 
         step5 = Tex(r"$\bullet$ Solve C simulatneous equations").next_to(title, DOWN, buff=.2).to_edge(LEFT)
         self.play(Transform(step1, step5))
-        self.play(Transform(nodea, Tex(r"$V_a=20V$").scale(.5).move_to(nodea.get_center())))
+        self.play(Transform(nodea, Tex(r"$V_a=20V$").scale(.5).move_to(nodea.get_center()+[-.5,0,0])))
         self.play(FadeOut(nodes), FadeOut(supps), comp.animate.next_to(step1, DOWN, buff=.2))
         for node, color in zip(
             circuit.node_list, [BLUE, RED, ORANGE, YELLOW, GREEN, PURPLE]
@@ -257,7 +257,7 @@ class NodalSetup(Slide):
         self.play(Create(circ), Create(circ16))
         self.next_slide()
 
-        supernode = Tex(r"Supernodes! Source between 2\\n nodes without reference").scale(.6).next_to(comp, DOWN, buff=.2).to_edge(LEFT)
+        supernode = Tex(r"Supernodes! Source between 2\\ nodes without reference").scale(.6).next_to(comp, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(supernode))
         vc = Tex(r"$V_{cb} = 10V$").scale(.75).next_to(supernode, DOWN, buff=.2).to_edge(LEFT)
         vc2 = Tex(r"$V_c - V_b = 10V$").scale(.75).next_to(vc, DOWN, buff=.2).to_edge(LEFT)
@@ -273,3 +273,27 @@ class NodalSetup(Slide):
         vd = Tex(r"Likewise: $V_d = V_e + 16V$").scale(.75).next_to(vc3, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(vd))
         self.play(Transform(noded, Tex(r"$V_e + 16V$").scale(.5).move_to(noded.get_center()+[.5,.25,0])), FadeOut(circ16))
+
+        self.next_slide()
+        self.play(FadeOut(step1), FadeOut(comp),FadeOut(vd), FadeOut(vc), FadeOut(vc2), FadeOut(vc3), FadeOut(supernode))
+        snode1 = Tex(r"KCL at Supernode $b$:").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        snode2 = Tex(r"$\frac{V_b-20V}{2.5k} + \frac{V_b}{10k} + \frac{V_b+10V-V_e}{5k} + \frac{V_b+10V - (V_e+16V)}{2.5k}=0$").scale(.5).next_to(snode1, DOWN, buff=.2).to_edge(LEFT)
+        snode3 = Tex(r"$11V_b - 6V_e = -84V$").scale(.6).next_to(snode2, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Write(snode1))
+        self.play(Write(snode2))
+        self.play(Write(snode3))
+        
+        self.next_slide()
+        self.play(FadeOut(snode1), FadeOut(snode2), snode3.animate.move_to(snode1.get_center()))
+        enode =  Tex(r"KCL at Supernode $e$:").next_to(snode3, DOWN, buff=.2).to_edge(LEFT)
+        enode2 = Tex(r"$\frac{V_e+16V-20V}{5k} + \frac{V_e+16V - (V_b+10V)}{2.5k} + \frac{V_e+16V-V_e}{1.25k} + \frac{V_e}{1k} = 0 $").scale(.5).next_to(enode, DOWN, buff=.2).to_edge(LEFT)
+        enode3 = Tex(r"$8V_e - 2V_b = -72V$").scale(.6).next_to(enode2, DOWN, buff=.2).to_edge(LEFT)
+        self.play(Write(enode))
+        self.play(Write(enode2))
+        self.play(Write(enode3))
+
+        self.next_slide()
+        self.play(FadeOut(enode), FadeOut(enode2), enode3.animate.move_to(enode.get_center()))
+        self.play(Write(Tex(r"$V_b = \frac{276}{19}V \quad V_e = \frac{240}{19}V$").scale(.75).next_to(enode3, DOWN, buff=.2).to_edge(LEFT)))
+
+        
