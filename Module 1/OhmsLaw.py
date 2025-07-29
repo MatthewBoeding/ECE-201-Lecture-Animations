@@ -5,6 +5,15 @@ from manim_circuit import *
 
 class OhmsLaw(Slide):
     def construct(self):
+        title = Tex(r"Ohm's Law").to_edge(UP)
+        voltage = Tex(r"$\bullet \quad V=\frac{Joule}{Coulomb}$").next_to(title, DOWN, buff=.2).to_edge(LEFT)
+        current = Tex(r"$\bullet \quad I=\frac{Coulomb}{Second}$").next_to(voltage, RIGHT, buff=.2)
+        power = Tex(r"$\bullet \quad P = \frac{Joule}{second} = VI$").next_to(voltage, DOWN, buff=.2).to_edge(LEFT)
+        self.add(title)
+        self.play(Write(voltage))
+        self.play(Write(current))
+        self.play(Write(power))
+        self.next_slide()
         vo = VoltageSource(label = " ")
         vo.remove(vo.label)
         
