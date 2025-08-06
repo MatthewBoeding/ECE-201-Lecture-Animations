@@ -10,7 +10,7 @@ class NodalSetup(Slide):
         step3 = Tex(r"$\bullet$ Count Voltage Sources (M)").next_to(step2, DOWN, buff=.2).to_edge(LEFT)
         step4 = Tex(r"$\bullet$ Complexity C = N-M").next_to(step3, DOWN, buff=.2).to_edge(LEFT)
         step5 = Tex(r"$\bullet$ Solve C simulatneous equations").next_to(step4, DOWN, buff=.2).to_edge(LEFT)
-        self.add(title)
+        self.play(Write(title))
         self.next_slide()
         self.play(Write(step1))
         self.play(Write(step2))

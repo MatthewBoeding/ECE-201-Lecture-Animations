@@ -67,7 +67,7 @@ class VoltageCurrentDividers(Slide):
 
         self.next_slide()
         c1 = Tex(r"$I_s = \frac{V}{R_1} + \frac{V}{R_2} = V(\frac{1}{R_1}+\frac{1}{R_2})$").scale(.8).next_to(title, DOWN, buff=.2).to_edge(LEFT)
-        c2 = Tex(r"$V = I_s(\frac{1}{R_1}\frac{1}{R_2})^{-1} - I_s\frac{R_1 R_2}{R_1+R_2}$").scale(.8).next_to(c1, DOWN, buff=.2).to_edge(LEFT)
+        c2 = Tex(r"$V = I_s(\frac{1}{R_1}+\frac{1}{R_2})^{-1} = I_s\frac{R_1 R_2}{R_1+R_2}$").scale(.8).next_to(c1, DOWN, buff=.2).to_edge(LEFT)
         c3 = Tex(r"$I_{R_2} = \frac{V}{R_2} = I_s(\frac{\frac{1}{R_2}}{\frac{1}{R_1}+\frac{1}{R_2}})$").scale(.8).next_to(c2, DOWN, buff=.2).to_edge(LEFT)
         c4 = Tex(r"$I_{R_2} = I_s\frac{R_1}{R_1+R_2}$").scale(.8).next_to(c3, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(c1))

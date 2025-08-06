@@ -10,7 +10,10 @@ class OhmsLaw(Slide):
         current = Tex(r"$\bullet \quad I=\frac{Coulomb}{Second}$").next_to(voltage, RIGHT, buff=.2)
         power = Tex(r"$\bullet \quad P = \frac{Joule}{second} = VI$").next_to(current, RIGHT, buff=.2)
 
-        self.add(title)
+        self.play(Write(title))
+
+        self.next_slide()
+
         self.play(Write(voltage))
         self.play(Write(current))
         self.play(Write(power))
@@ -21,9 +24,10 @@ class OhmsLaw(Slide):
         nodea = Dot(vo.get_terminals("positive"))
         nodeb = Dot(vo.get_terminals("negative"))
         vx = Tex(r"$V_x$").scale(.55).next_to(nodea, DOWN, buff=0.1)
-        irc = Arrow(start=nodea.get_center()+[0,.25,0], end=nodea.get_center()+[.5,.25,0], tip_length=0.1).scale(.5)
+        irc = Arrow(start=LEFT, end=RIGHT).scale(.5, scale_tips = True).next_to(nodea, UP, buff=.2).shift(RIGHT*.5)
         irc_lab = Tex(r"$I_{X}$").scale(.6).next_to(irc, UP, buff = .2).scale(.75)
-
+        
+        irc.set_z_index(999)
         y_dist = (nodea.get_center() - nodeb.get_center())[1]
         rect = Rectangle(height = y_dist / 1.5, width = .5).shift(RIGHT*1)
         text = Tex("X").move_to(rect.get_center())
@@ -32,7 +36,7 @@ class OhmsLaw(Slide):
         line3 = Line(nodeb.get_center(), (rect.get_center() * [ 1,0,1]+ nodeb.get_center()*[0,1,0]))
         line4 = Line((rect.get_center() * [ 1,0,1]+ nodeb.get_center()*[0,1,0]), rect.get_center() + [0,-y_dist/3,0])
         vgrp = VGroup().add(nodea, nodeb, rect, text, line1, line2, line3, line4, vx, irc, irc_lab).to_edge(RIGHT).shift(LEFT*1.5)
-        self.play(FadeIn(vgrp))
+        self.play(FadeIn(vgrp), Create(irc))
         self.wait()
         self.next_slide()
 
@@ -42,7 +46,7 @@ class OhmsLaw(Slide):
         vir = Tex(r"$V=IR \quad \quad \quad R=\frac{V}{I}\quad \quad \quad I = \frac{V}{R}$").next_to(ohms, DOWN, buff=.2).to_edge(LEFT)
         self.play(Write(vir))
 
-        vix = Tex(r"$R_x = \frac{V_x}{I_x}$").scale(.75).next_to(vgrp, LEFT, buff=.2)
+        vix = Tex(r"$R_x = \frac{V_x}{I_x}$").scale(.75).next_to(vgrp, LEFT, buff=.4)
         self.play(Write(vix))
         self.next_slide()
 
@@ -52,6 +56,7 @@ class OhmsLaw(Slide):
 
         vo = VoltageSource(12).to_edge(LEFT)
         r1 = Resistor("2k", direction=RIGHT).rotate(DEGREES *-90).next_to(vo, RIGHT, buff=.2).shift(RIGHT*1)
+        vo.shift(DOWN*.25)
         gnd = Ground().move_to(vo.get_terminals("negative")).shift(DOWN*.75)
         circuit = Circuit().add(vo,r1)
         circuit.add_wire(vo.get_terminals("positive"), r1.get_terminals("left"))
@@ -63,10 +68,11 @@ class OhmsLaw(Slide):
         v1.remove(v1.label)
         vs = Tex(r"$V_s$").scale(.75).next_to(v1, LEFT, buff=.1)
         r2 = Resistor("16k", direction=LEFT).rotate(DEGREES *-90).next_to(v1, LEFT, buff=.2).shift(LEFT*1+DOWN*.25)
+        v1.shift(DOWN*.25)
         pw = Tex(r"$P=3.6mW$").scale(.5).next_to(r2, LEFT, buff=.2).shift(DOWN*.5+RIGHT*.5)
         gnd = Ground().next_to(v1, DOWN, buff=.75)
         circuit2 = Circuit().add(v1,r2,vs,pw)
-        circuit2.add_wire(v1.get_terminals("positive"), r2.get_terminals("left"), invert = True)
+        circuit2.add_wire(v1.get_terminals("positive"), r2.get_terminals("left"))
         circuit2.add_wire(v1.get_terminals("negative"), gnd.get_terminals())
         circuit.add_wire(gnd.get_terminals(), r2.get_terminals("right"), invert = True)
         self.play(FadeIn(circuit2))
@@ -91,8 +97,8 @@ class OhmsLaw(Slide):
             y_range=[-3, 3, 1],
             axis_config={"color": WHITE}
         ).scale(.75)
-        x_label = axes.get_x_axis_label("x")
-        y_label = axes.get_y_axis_label("y")
+        x_label = axes.get_x_axis_label("v")
+        y_label = axes.get_y_axis_label("i")
 
         line = axes.plot(lambda x: x, color=RED)  # y = x line
         point_line1 = Line(
