@@ -13,9 +13,11 @@ class DiodeLecture(Slide):
         
         diode = VGroup()
         diode.add(Triangle(color=WHITE).scale(.8).rotate(DEGREES*60))
+        anode = Line(start = [0,0,0], end = [0,1,0]).next_to(diode[0], UP, buff=0)
+        cathode = Line(start = [0,0,0], end = [0,1,0]).next_to(diode[0], DOWN, buff=0)
         diode.add(Line(start = [0,0,0], end = [1,0,0]).next_to(diode[0], DOWN, buff=0))
-        diode.add(Line(start = [0,0,0], end = [0,1,0]).next_to(diode[0], DOWN, buff=0))
-        diode.add(Line(start = [0,0,0], end = [0,1,0]).next_to(diode[0], UP, buff=0))
+        diode.add(cathode)
+        diode.add(anode)
         diode.scale(.8)
 
         # Define axes
@@ -81,16 +83,63 @@ class DiodeLecture(Slide):
         #==========================================ANIMATIONS===============================================
         self.add(title, diode)
         self.wait()
+        self.next_slide()
+        ''' 
+        SLIDE 2
+        '''
+        anlabel = Tex(r"$\leftarrow Anode$\\p-type").next_to(anode, RIGHT, buff=.75)
+        calabel = Tex(r"$\leftarrow Cathode$\\n-type").next_to(cathode, RIGHT, buff=.75).shift(DOWN*.5)
+        self.play(Write(anlabel))
+        self.play(Write(calabel))
 
         '''
-        SLIDE 2
+        SLIDE 3
         '''
         self.next_slide()
     
         self.play(FadeOut(diode))
+        self.play(FadeOut(anlabel), FadeOut(calabel))
         diode.to_corner(UL).scale(.7)
-        title2 = Tex(r"Check Valve Analogy:").next_to(diode, RIGHT, buff=.5)
-        self.play(FadeIn(diode), FadeIn(title2))
+        self.play(FadeIn(diode))
+
+
+        p_region = Rectangle(width=3, height=2, color=RED, fill_opacity=0.5).shift(LEFT * 2)
+        n_region = Rectangle(width=3, height=2, color=BLUE, fill_opacity=0.5).shift(RIGHT * 2)
+
+        # Label regions
+        p_label = Text("P-type", font_size=24).next_to(p_region, UP)
+        n_label = Text("N-type", font_size=24).next_to(n_region, UP)
+
+        # Depletion region
+        depletion = Rectangle(width=1, height=2, color=YELLOW, fill_opacity=0.3)
+        depletion_label = Text("Depletion Region", font_size=20).next_to(depletion, DOWN)
+
+        # Add charge carriers
+        holes = [Dot(p_region.get_center() + RIGHT * (i * 0.4 - 1), color=RED) for i in range(5)]
+        electrons = [Dot(n_region.get_center() + LEFT * (i * 0.4 - 1), color=BLUE) for i in range(5)]
+
+        # Electric field arrows
+        field_arrows = VGroup(*[
+            Arrow(start=LEFT * 0.5 + UP * (i * 0.4 - 0.8), end=RIGHT * 0.5 + UP * (i * 0.4 - 0.8), buff=0.1, color=WHITE)
+            for i in range(5)
+        ])
+
+        field_label = Text("Electric Field", font_size=20).next_to(field_arrows, UP)
+
+        # Animate
+        self.play(FadeIn(p_region), FadeIn(n_region), Write(p_label), Write(n_label))
+        self.play(FadeIn(depletion), Write(depletion_label))
+        self.play(*[FadeIn(h) for h in holes], *[FadeIn(e) for e in electrons])
+        self.play(*[GrowArrow(arrow) for arrow in field_arrows], Write(field_label))
+        self.wait(2)
+
+
+        '''
+        Slide 4
+        '''
+        self.next_slide()
+        title2 = Tex(r"Check Valve Analogy:").scale(.75).next_to(diode, RIGHT, buff=.5).shift(UP*.5)
+        self.play(FadeIn(title2))
         self.play(FadeIn(valve))
         self.play(FadeIn(dot1))
 
@@ -99,7 +148,7 @@ class DiodeLecture(Slide):
         '''
         self.next_slide()
         
-        title3 = Tex(r"Uni-Directional Flow").next_to(title2, DOWN, buff=.2)
+        title3 = Tex(r"Uni-Directional Flow").scale(.75).next_to(title2, DOWN, buff=.2)
         self.play(FadeIn(title3))
         self.play(dot1.animate.shift(RIGHT*.75))
         self.play(Rotate(valve_line1, angle = 45*DEGREES, about_point = [0,1,0]), Rotate(valve_line2, angle = -45*DEGREES, about_point = [0,-1,0]),
@@ -119,7 +168,7 @@ class DiodeLecture(Slide):
         self.next_slide()
 
         self.play(FadeOut(title3))
-        title3 = Tex(r"Not Enough Volume").next_to(title2, DOWN, buff=.2)
+        title3 = Tex(r"Not Enough Charge").scale(.75).next_to(title2, DOWN, buff=.2)
         self.play(FadeIn(title3))
         self.play(FadeOut(dot1))
         self.play(FadeIn(dot2))
@@ -137,8 +186,8 @@ class DiodeLecture(Slide):
         self.next_slide()
 
         self.play(FadeOut(title3))
-        title3 = Tex(r"Incorrect Direction").next_to(title2, DOWN, buff=.2)
-        self.play(FadeIn(title3), FadeOut(title2))
+        title3 = Tex(r"Incorrect Direction").scale(.75).next_to(title2, DOWN, buff=.2)
+        self.play(FadeIn(title3))
         self.play(FadeOut(dot2), FadeIn(dot3))
         self.play(dot3.animate.shift(LEFT*.6))
         self.play(dot3.animate.shift(RIGHT*.1))
@@ -146,19 +195,21 @@ class DiodeLecture(Slide):
         self.play(dot3.animate.shift(RIGHT*.1))
         self.play(dot3.animate.shift(LEFT*.1))
         self.play(dot3.animate.shift(RIGHT*.1))
-
         '''
         SLIDE 7
         '''
         self.next_slide()
-
+        self.play(FadeOut(title2))
         title2 = Tex(r"Linear Devices - Resistors").scale(.5)
         self.play(FadeOut(valve), FadeOut(dot3), FadeOut(title3))
         title2.next_to(diode, DOWN, buff=.2).to_edge(LEFT)
         r1.next_to(title2, DOWN,buff=.2)
         self.play(FadeIn(title2),FadeIn(r1))
         self.play(r1.animate.to_edge(LEFT))
-        
+
+        self.play(FadeOut(p_region), FadeOut(n_region), FadeOut(p_label), FadeOut(n_label),\
+                    FadeOut(depletion), FadeOut(depletion_label), *[FadeOut(h) for h in holes], \
+                    *[FadeOut(e) for e in electrons], *[FadeOut(arrow) for arrow in field_arrows], FadeOut(field_label))
 
         # Add all elements to scene
         self.play(Create(axes), Write(axes_labels))
