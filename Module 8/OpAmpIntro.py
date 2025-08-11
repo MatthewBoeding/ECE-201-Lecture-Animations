@@ -49,15 +49,19 @@ class OpAmpIntro(Slide):
         self.next_slide()
         vs = VoltageSource(dependent=False).scale(.75)
         vs.remove(vs.label)
-        vslab = Tex(r"$V_s$").scale(.6).next_to(vs, RIGHT, buff=.2)
+  
         vs.move_to(inv.get_center()+[-1.5,.75,0])
+        vslab = Tex(r"$V_s$").scale(.6).next_to(vs, LEFT, buff=.2)
+        rs = Resistor().scale(.5).move_to(noninv.get_center()).shift(LEFT*.75)
+        rslab = Tex(r"$R_s$").scale(.6).next_to(rs, UP, buff=.2)
         rl = Resistor().scale(.4).rotate(-90*DEGREES)
         rl.shift(lout.get_end()-rl.get_terminals('left'))
         rllab = Tex(r"$R_L$").scale(.5).next_to(rl, RIGHT, buff=.2)
-        circuit = Circuit().add(vs)
-        circuit.add_wire(vs.get_terminals("positive"), noninv.get_center())
+        circuit = Circuit().add(vs, rslab)
+        circuit.add_wire(vs.get_terminals("positive"), rs.get_terminals("left"))
+        circuit.add_wire(rs.get_terminals("right"), noninv.get_center())
         circuit.add_wire(vs.get_terminals("negative"), inv.get_center())
-        
+        circuit.add(vslab, rs)
         self.play(Create(circuit))
 
         self.next_slide()
@@ -73,7 +77,7 @@ class OpAmpIntro(Slide):
 
         allcirc = VGroup().add(mob for mob in self.mobjects)
         self.play(allcirc.animate.to_edge(LEFT))
-        self.play(Transform(volab, Tex(r"$A(V_{R_i}$").scale(.6).move_to(volab.get_center())))
+        self.play(Transform(volab, Tex(r"$AV_{R_i}$").scale(.6).move_to(volab.get_center())))
         vieq = Tex(r"$V_{R_i} = \frac{R_i}{R_i+R_s}V_s$").scale(.75).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
         voeq = Tex(r"$V_{R_L} = AV_{R_i}\frac{R_L}{R_L+R_o}$").scale(.75).next_to(vieq, DOWN, buff=.2).to_edge(RIGHT)
         voeq2 = Tex(r"$V_{R_L} = A \frac{R_i}{R_i+R_s}V_s\frac{R_L}{R_L+R_o}$").scale(.75).next_to(voeq, DOWN, buff=.2).to_edge(RIGHT)
@@ -96,3 +100,56 @@ class OpAmpIntro(Slide):
         self.play(Transform(vieq, Tex(r"$V_{R_L} = AV_s$").scale(.75).move_to(vieq)))
         gone = [voeq, voeq2, consider, then]
         self.play(*[FadeOut(mob) for mob in gone])
+        ass = Tex(r"Assumptions:").next_to(vieq, DOWN, buff=.2).to_edge(RIGHT)
+        ass1 = Tex(r"$R_i \rightarrow \infty$").scale(.75).next_to(ass, DOWN, buff=.2).to_edge(RIGHT)
+        ass2 = Tex(r"$A \rightarrow \infty $").scale(.75).next_to(ass1, DOWN, buff=.2).to_edge(RIGHT)
+        ass3 = Tex(r"$R_o \rightarrow 0$").scale(.75).next_to(ass2, DOWN, buff=.2).to_edge(RIGHT)
+        conseq = Tex(r"Consequences:").next_to(ass3, DOWN, buff=.2).to_edge(RIGHT)
+        conseq1 = Tex(r"$i_+ = i_- = 0 $").scale(.75).next_to(conseq, DOWN, buff=.2).to_edge(RIGHT)
+        conseq2 = Tex(r"$v_+ - v_- = 0  $").scale(.75).next_to(conseq1, DOWN, buff=.2).to_edge(RIGHT)
+        self.play(Write(ass), Write(ass1), Write(ass2), Write(ass3), Write(conseq), Write(conseq1), Write(conseq2))
+
+        self.next_slide()
+
+        title = Tex(r"Inverting Configuration").to_edge(UP)
+        
+        self.play(*[FadeOut(mob) for mob in self.mobjects])
+        self.play(Write(title))
+        opamp.remove(inv, noninv)
+        opamp.scale(.5)
+        vout.shift(UP*.5+RIGHT*.5)
+        newinvlabel = Tex(r"$+$").scale(.5).move_to(invlabel.get_center()+[.5,0,0])
+        newnoninvlabel = Tex(r"$-$").scale(.5).move_to(noninvlabel.get_center()+[.5,0,0])
+
+        self.play(Create(opamp), Transform(invlabel, newinvlabel), Transform(noninvlabel, newnoninvlabel))
+        noninvleadloc = triangle.get_left()*[1,0,1] + noninvlabel.get_center()*[0,1,0]
+        invleadloc = triangle.get_left()*[1,0,1] + invlabel.get_center()*[0,1,0]
+        noninvgnd = Ground().next_to(noninvleadloc,LEFT,buff=.1).shift([-1,-2,0])
+        invgnd = Ground().next_to(invleadloc,LEFT,buff=.1).shift([-2.5,-1.5,0])
+        vs = VoltageSource("", dependent=False).move_to(invgnd.get_terminals()+[0,1,0])
+        vs.shift([-1,0,0] *(vs.get_terminals("negative")-invgnd.get_terminals()))
+        vs.remove(vs.label)
+        vslab.next_to(vs, LEFT, buff=.1)
+
+        r1 = Resistor().scale(.75).next_to(vs, UP, buff=.5)
+        r1.move_to(noninvleadloc + [-1.5,0,0])
+        r1lab = Tex(r"$R_1$").scale(.75).next_to(r1,UP,buff=.2)
+        
+        r2 = Resistor().scale(.75).next_to(triangle, UP, buff=.5)
+        r2lab = Tex(r"$R_2$").scale(.75).next_to(r2,UP,buff=.2)
+        invcirc = Circuit().add(invgnd, vs, noninvgnd, vslab, r1, r2, r1lab, r2lab)
+        invcirc.add_wire(vs.get_terminals("negative"), invgnd.get_terminals())
+        invcirc.add_wire(vs.get_terminals("positive"), r1.get_terminals("left"))
+        invcirc.add_wire(r1.get_terminals("right"), noninvleadloc)
+        invcirc.add_wire(r1.get_terminals("right"), r2.get_terminals("left"))
+        invcirc.add_wire(r2.get_terminals("right"), triangle.get_right()+[.5,0,0], invert = True)
+        invcirc.add_wire(triangle.get_right(), triangle.get_right()+[.5,0,0])
+        invcirc.add_wire(noninvgnd.get_terminals(), invleadloc)
+        self.play(Create(invcirc))
+
+        self.next_slide()
+        iinv = Tex(r"$i_-=0$").scale(.6).move_to(noninvleadloc-[.5,.25,0])
+        vnoninv = Tex(r"$v_+ = 0$").scale(.6).move_to(invleadloc-[.5,.25,0])
+        self.play(Write(vnoninv), Write(iinv))
+
+        kcl = Tex(r"$\frac{V_s-v_-}{R_1} + \frac{V_o-v_-}{R_2} = i_-$").scale(.75).next_to()
