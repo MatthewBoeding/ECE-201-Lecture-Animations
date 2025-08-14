@@ -2,16 +2,24 @@ from manim import *
 from manim_slides import Slide
 class BJTIntroduction(Slide):
     def construct(self):
-        # Slide 1: NPN
         self.show_npn()
         self.next_slide()
 
-        # Slide 2: PNP
+        self.show_npn_carrier_flow()
+        self.next_slide()
+
         self.clear()
         self.show_pnp()
         self.next_slide()
 
+        self.show_pnp_carrier_flow()
+        self.next_slide()
+        self.play(*[FadeOut(mob) for mob in self.mobjects])
+        self.show_npn_beta_slider()
+
     def show_npn(self):
+        title = Tex(r"NPN BJT").to_edge(UP)
+        self.play(Write(title))
         # === Internal Layers ===
         n_left = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=GRAY, fill_opacity=0.5).shift(LEFT * 2)
         p_mid = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=RED, fill_opacity=0.5).next_to(n_left, RIGHT, buff=0)
@@ -52,12 +60,14 @@ class BJTIntroduction(Slide):
         desc = Tex(
             r"An NPN transistor consists of a P-doped semiconductor",
             r"between two N-doped layers."
-        ).scale(0.4).next_to(layers, DOWN, buff=1.2).to_edge(DOWN)
+        ).scale(0.5).next_to(title, DOWN, buff=.2)
 
         # === Show ===
         self.play(FadeIn(layers), FadeIn(npn_symbol), Write(desc))
 
     def show_pnp(self):
+        title = Tex(r"PNP BJT").to_edge(UP)
+        self.play(Write(title))
         # === Internal Layers ===
         p_left = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=RED, fill_opacity=0.5).shift(LEFT * 2)
         n_mid = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=GRAY, fill_opacity=0.5).next_to(p_left, RIGHT, buff=0)
@@ -87,8 +97,8 @@ class BJTIntroduction(Slide):
 
         symbol_labels = VGroup(
             Tex("Base").scale(0.4).next_to(base.get_start(), LEFT),
-            Tex("Collector").scale(0.4).next_to(collector.get_start(), DOWN, buff=.5),
-            Tex("Emitter").scale(0.4).next_to(emitter.get_start(), UP, buff=.5),
+            Tex("Collector").scale(0.4).next_to(collector.get_end(), DOWN, buff=.75),
+            Tex("Emitter").scale(0.4).next_to(emitter.get_end(), UP, buff=.75),
             Tex("PNP").scale(0.5).move_to(circle.get_center())
         )
 
@@ -98,10 +108,131 @@ class BJTIntroduction(Slide):
         desc = Tex(
             r"A PNP transistor contains an N-doped layer",
             r"between two layers of P-doped material."
-        ).scale(0.4).next_to(layers, DOWN, buff=1.2).to_edge(DOWN)
+        ).scale(0.5).next_to(title, DOWN, buff=.2)
 
         # === Show ===
         self.play(FadeIn(layers), FadeIn(pnp_symbol), Write(desc))
+    def show_npn_carrier_flow(self):
+        # === NPN structure again ===
+        n_left = Rectangle(width=1.2, height=1.5, fill_color=GRAY, fill_opacity=0.5).shift(LEFT * 2)
+        p_mid = Rectangle(width=1.2, height=1.5, fill_color=RED, fill_opacity=0.5).next_to(n_left, RIGHT, buff=0)
+        n_right = Rectangle(width=1.2, height=1.5, fill_color=GRAY, fill_opacity=0.5).next_to(p_mid, RIGHT, buff=0)
+
+        # Depletion regions
+        depletion1 = Rectangle(width=0.2, height=1.5, fill_color=YELLOW, fill_opacity=0.3, stroke_opacity=0).move_to(n_left.get_right() + RIGHT * 0.1)
+        depletion2 = Rectangle(width=0.2, height=1.5, fill_color=YELLOW, fill_opacity=0.3, stroke_opacity=0).move_to(p_mid.get_right() + RIGHT * 0.1)
+
+        structure = VGroup(n_left, p_mid, n_right, depletion1, depletion2).shift(LEFT * 2)
+
+        self.play(FadeIn(structure))
+
+        # === Electrons ===
+        electrons = VGroup()
+        for y in np.linspace(-0.6, 0.6, 5):
+            dot = Dot(color=BLUE).scale(0.3).move_to(n_left.get_left() + RIGHT * 0.3 + UP * y)
+            electrons.add(dot)
+
+        self.play(FadeIn(electrons))
+
+        # === Animate electrons across layers ===
+        self.play(*[dot.animate.shift(RIGHT * 2.5) for dot in electrons], run_time=1.5)
+
+        self.wait(1)
+
+    def show_pnp_carrier_flow(self):
+        # === PNP structure again ===
+        p_left = Rectangle(width=1.2, height=1.5, fill_color=RED, fill_opacity=0.5).shift(LEFT * 2)
+        n_mid = Rectangle(width=1.2, height=1.5, fill_color=GRAY, fill_opacity=0.5).next_to(p_left, RIGHT, buff=0)
+        p_right = Rectangle(width=1.2, height=1.5, fill_color=RED, fill_opacity=0.5).next_to(n_mid, RIGHT, buff=0)
+
+        # Depletion regions
+        depletion1 = Rectangle(width=0.2, height=1.5, fill_color=YELLOW, fill_opacity=0.3, stroke_opacity=0).move_to(p_left.get_right() + RIGHT * 0.1)
+        depletion2 = Rectangle(width=0.2, height=1.5, fill_color=YELLOW, fill_opacity=0.3, stroke_opacity=0).move_to(n_mid.get_right() + RIGHT * 0.1)
+
+        structure = VGroup(p_left, n_mid, p_right, depletion1, depletion2).shift(LEFT * 2)
+
+        self.play(FadeIn(structure))
+
+        # === Holes ===
+        holes = VGroup()
+        for y in np.linspace(-0.6, 0.6, 5):
+            dot = Dot(color=RED).scale(0.3).move_to(p_left.get_left() + RIGHT * 0.3 + UP * y)
+            holes.add(dot)
+
+        self.play(FadeIn(holes))
+
+        self.play(*[dot.animate.shift(RIGHT * 2.5) for dot in holes], run_time=1.5)
+
+        self.wait(1)
+
+    def show_npn_beta_slider(self):
+        # === NPN simplified structure ===
+        title = Tex(r"BJT Current Gain").to_edge(UP)
+        self.play(Write(title))
+        emitter = Rectangle(width=1.5, height=1.5, fill_color=GRAY, fill_opacity=0.5).shift(LEFT * 3)
+        base = Rectangle(width=0.8, height=1.5, fill_color=RED, fill_opacity=0.5).next_to(emitter, RIGHT, buff=0)
+        collector = Rectangle(width=1.5, height=1.5, fill_color=GRAY, fill_opacity=0.5).next_to(base, RIGHT, buff=0)
+        letters = VGroup(
+            Tex("N").move_to(emitter.get_center()),
+            Tex("P").move_to(base.get_center()),
+            Tex("N").move_to(collector.get_center())
+        )
+        structure = VGroup(emitter, base, collector, letters)
+        self.play(FadeIn(structure))
+
+        # === β Tracker ===
+        beta_tracker = ValueTracker(20)
+
+        # === Base current arrow (fixed) ===
+        ib_arrow = Arrow(UP, DOWN, color=YELLOW).scale(0.6).next_to(base, UP, buff=0.2)
+        ib_label = MathTex("I_b").scale(0.6).next_to(ib_arrow, LEFT)
+        ib_group = VGroup(ib_arrow, ib_label)
+
+        # === Collector current arrow (dynamic) ===
+        def get_ic_arrow():
+            height = 0.6 + beta_tracker.get_value() / 40  # scales with beta
+            return Arrow(LEFT, RIGHT, color=BLUE).scale(height).next_to(base, DOWN, buff=0.2)
+
+        ic_arrow = always_redraw(get_ic_arrow)
+        ic_label = always_redraw(lambda: MathTex("I_c").scale(0.6).next_to(ic_arrow, DOWN))
+        ic_group = VGroup(ic_arrow, ic_label)
+
+        self.play(GrowArrow(ib_arrow), Write(ib_label))
+        self.play(FadeIn(ic_arrow), Write(ic_label))
+
+        # === Equation ===
+        eq = MathTex(r"\beta = \frac{I_c}{I_b}").scale(0.75).next_to(title, DOWN, buff=.2)
+        self.play(Write(eq))
+
+        # === Slider components ===
+        slider_line = Line(LEFT * 1.25, RIGHT * 2).scale(0.5).to_edge(DOWN).shift(UP * 1.5)
+        slider_dot = always_redraw(lambda: Dot().move_to(
+            slider_line.point_from_proportion((beta_tracker.get_value() - 20) / 80)
+        ))
+        beta_value_label = always_redraw(lambda: Tex(
+            f"\\(\\beta = {int(beta_tracker.get_value())}\\)"
+        ).scale(0.6).next_to(slider_line, UP))
+
+        self.play(Create(slider_line), FadeIn(slider_dot), Write(beta_value_label))
+
+        # === Animate changing beta ===
+        self.play(beta_tracker.animate.set_value(100), run_time=4, rate_func=linear)
+        self.wait()
+
+        # === NEXT SLIDE: Show disappearance of Ib and Ic
+        self.next_slide()
+
+        self.play(FadeOut(ib_group))
+        self.wait(0.5)
+        self.play(FadeOut(ic_group))
+        self.wait()
+
+        # Optional conclusion text
+        conclusion = Tex(r"No base current $\Rightarrow$ no collector current").scale(0.6).next_to(eq, DOWN, buff=.2)
+        self.play(Write(conclusion))
+        self.wait(2)
+
+
     '''def construct(self):
  # === Regions: Emitter, Base, Collector ===
         emitter = Rectangle(width=2, height=2, color=BLUE).shift(LEFT * 3)
