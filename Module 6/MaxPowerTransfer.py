@@ -25,92 +25,8 @@ class MaxPowerTransfer(Slide):
         # === Title ===
         title = Tex("Maximum Power Transfer Theorem").scale(1.2).to_edge(UP)
         self.play(Write(title))
-        self.wait()
-        self.next_slide()
-
-        # === Thevenin Equivalent Circuit ===
-        v_th = Tex(r"$V_{th}$").scale(0.6)
-        R_th = Rectangle(width=0.5, height=1, color=BLUE).next_to(v_th, RIGHT, buff=0.3)
-        R_th_label = Tex(r"$R_{th}$").scale(0.5).next_to(R_th, DOWN, buff=0.1)
-
-        load = Rectangle(width=0.5, height=1, color=YELLOW).next_to(R_th, RIGHT, buff=1)
-        load_label = Tex(r"$R_L$").scale(0.5).next_to(load, DOWN, buff=0.1)
-
-        wire_left = Line(LEFT * 3, v_th.get_left())
-        wire_vth = Line(v_th.get_right(), R_th.get_left())
-        wire_th = Line(R_th.get_right(), load.get_left())
-        wire_right = Line(load.get_right(), RIGHT * 3)
-        bottom_wire = Line(wire_left.get_start(), wire_right.get_end()).shift(DOWN * 1.2)
-
-        v_th_group = VGroup(v_th, R_th, load, wire_left, wire_vth, wire_th, wire_right, bottom_wire, R_th_label, load_label).shift(DOWN)
-
-        self.play(Create(v_th_group))
-        self.wait()
-        self.next_slide()
-
-        # === Narration Text ===
-        statement = Tex(
-            r"The maximum power is transferred to the load when ",
-            r"$R_L = R_{th}$"
-        ).scale(0.7).next_to(v_th_group, UP, buff=0.8)
-
-        self.play(Write(statement))
-        self.wait()
-        self.next_slide()
-
-        # === Derivation Step ===
-        deriv = Tex(r"$P = \frac{V_{th}^2 R_L}{(R_{th} + R_L)^2}$").scale(0.8).to_edge(UP)
-        self.play(Write(deriv))
-        self.wait()
-
-        highlight = SurroundingRectangle(deriv[0][10:15], color=YELLOW)  # around R_L in numerator
-        self.play(Create(highlight))
-        self.next_slide()
-
-        # === Power vs Load Resistance Graph ===
-        axes = Axes(
-            x_range=[0, 10, 1],
-            y_range=[0, 1.2, 0.2],
-            x_length=6,
-            y_length=3,
-            axis_config={"include_numbers": True}
-        ).shift(DOWN * 1)
-
-        axes_labels = axes.get_axis_labels(x_label="R_L", y_label="Power")
-
-        # Example curve: P = k * R_L / (R_th + R_L)^2
-        R_th_val = 5
-        V_th_val = 1
-        power_curve = axes.plot(
-            lambda r: (V_th_val**2 * r) / ((R_th_val + r) ** 2),
-            color=BLUE
-        )
-
-        self.play(Create(axes), Write(axes_labels))
-        self.play(Create(power_curve))
-        self.next_slide()
-
-        # === Marking Maximum Point ===
-        max_x = R_th_val
-        max_y = (V_th_val**2 * R_th_val) / ((R_th_val + R_th_val)**2)
-        dot = Dot(axes.c2p(max_x, max_y), color=YELLOW)
-        label = Tex(r"$R_L = R_{th}$").scale(0.5).next_to(dot, UP)
-
-        self.play(FadeIn(dot), Write(label))
-        self.wait()
-        self.next_slide()
-
-        # === Final Summary ===
-        box = Tex(
-            r"\textbf{Maximum Power Transfer occurs when:}",
-            r"$\quad R_L = R_{th}$"
-        ).scale(0.8).to_edge(DOWN)
-
-        self.play(Write(box))
-        self.wait()
-
-        self.next_slide()
-        self.play(*[FadeOut(mob) for mob in self.mobjects])
+        
+        
         circuit = Circuit()
         vo = VoltageSource(value = " ",label=False, dependent = False)
         vo.remove(vo.label)
@@ -125,6 +41,56 @@ class MaxPowerTransfer(Slide):
         circuit.add_wire(vo.get_terminals("positive"), rth.get_terminals("left"))
         circuit.add_wire(rth.get_terminals("right"), rl.get_terminals("right"), invert=True)
         circuit.add_wire(rl.get_terminals("left"), vo.get_terminals("negative"), invert=True)
+        self.play(FadeIn(circuit))
+        self.next_slide()
+        self.play(Transform(title, Tex(r"Derivation: Maximum Power Transfer").scale(1.1).to_edge(UP)))
+        self.wait()
+        self.play(circuit.animate.to_edge(LEFT))
+        # Step 1: Define power equation
+        eq1 = MathTex(
+            r"P = \frac{V_{th}^2 R_L}{(R_{th} + R_L)^2}"
+        ).scale(0.7).next_to(title, DOWN, buff=0.2).to_edge(RIGHT)
+        self.play(Write(eq1))
+        self.wait()
+
+        self.next_slide()
+
+        # Step 2: Differentiate P w.r.t R_L
+        eq2 = MathTex(
+            r"\frac{dP}{dR_L} = \frac{V_{th}^2 \left[(R_{th} + R_L)^2 - 2R_L(R_{th} + R_L)\right]}{(R_{th} + R_L)^4}"
+        ).scale(0.7).next_to(eq1, DOWN, buff=0.2).to_edge(RIGHT)
+        self.play(Write(eq2))
+        self.wait()
+
+        self.next_slide()
+
+        # Step 3: Set derivative = 0
+        eq3 = MathTex(
+            r"\frac{dP}{dR_L} = 0 \Rightarrow (R_{th} + R_L)^2 = 2R_L(R_{th} + R_L)"
+        ).scale(0.7).next_to(eq2, DOWN, buff=0.2).to_edge(RIGHT)
+        self.play(Write(eq3))
+        self.wait()
+
+        self.next_slide()
+
+        # Step 4: Solve for R_L
+        eq4 = MathTex(
+            r"(R_{th} + R_L)^2 = 2R_L(R_{th} + R_L) \\ \Rightarrow R_{th} + R_L = 2R_L \\ \Rightarrow R_{th} = R_L"
+        ).scale(0.7).next_to(eq3, DOWN, buff=0.2).to_edge(RIGHT)
+        self.play(Write(eq4))
+        self.wait()
+
+        self.next_slide()
+
+        # Final box
+        result = Tex(r"\\[1em]Maximum power transfer occurs when:", r"$\quad R_L = R_{th}$").scale(0.9).set_color(YELLOW).next_to(eq4, DOWN, buff=.2).to_edge(RIGHT)
+        self.play(Write(result))
+        self.wait()
+        self.next_slide()
+        self.play(*[FadeOut(mob) for mob in self.mobjects])
+        self.play(FadeIn(circuit))
+        title = Tex(r"Power Transfer vs Efficiency").to_edge(UP)
+        self.play(Write(title))
 
         axes = Axes(
             x_range=[0, 5, .5],
@@ -134,9 +100,9 @@ class MaxPowerTransfer(Slide):
             axis_config={"include_numbers": True},
             tips=False,
         )
-        axes.scale(.4)
-        #axes_labels = axes.get_axis_labels(x_label="V", y_label="I")
-
+        axes.scale(.4).shift(RIGHT*.5)
+        axes_labels = axes.get_axis_labels(x_label=r"\frac{R_L}{R_{TH}}", y_label=r"\frac{P}{P_{max}}/\frac{P_{R_L}}{P_T}")
+        
         x_pow_eff, y_pow_eff = power_efficiency_plot()
         graph = axes.plot_line_graph(
             x_values=x_pow_eff,
@@ -153,11 +119,40 @@ class MaxPowerTransfer(Slide):
             add_vertex_dots=False
         )
 
-        self.play(FadeIn(circuit))
         self.next_slide()
         
         self.play(circuit.animate.to_edge(LEFT))
-        self.play(FadeIn(axes))
+        self.play(FadeIn(axes), Write(axes_labels))
         self.play(Create(graph))
         self.play(Create(graph2))
+
+        legend_dot1 = Dot(color=RED).scale(0.5)
+        legend_label1 = Tex("Power Efficiency").scale(0.4).next_to(legend_dot1, RIGHT, buff=0.2)
+
+        legend_dot2 = Dot(color=BLUE).scale(0.5)
+        legend_label2 = Tex("Power Transfer").scale(0.4).next_to(legend_dot2, RIGHT, buff=0.2)
+
+        legend_item1 = VGroup(legend_dot1, legend_label1)
+        legend_item2 = VGroup(legend_dot2, legend_label2)
+
+        legend = VGroup(legend_item1, legend_item2).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        legend.next_to(axes, RIGHT, buff=.5)
+
+        self.play(FadeIn(legend))
+
+        # === Dashed Line at R_L = R_th (max power transfer point) ===
+        max_x = 1  # Replace with your actual R_th value if dynamic
+        max_power_y = axes.coords_to_point(max_x, 1.0)[1]  # y-value here is 1.0 as a visual cue
+
+        dashed_line = DashedLine(
+            start=axes.c2p(max_x, 0),
+            end=axes.c2p(max_x, 1),
+            color=RED,
+            stroke_width=2,
+            dash_length=0.1
+        )
+        label = Tex(r"$R_L = R_{th}$").scale(0.5).next_to(dashed_line, RIGHT)
+
+        self.play(Create(dashed_line), Write(label))
+
         self.next_slide()
