@@ -152,4 +152,10 @@ class OpAmpIntro(Slide):
         vnoninv = Tex(r"$v_+ = 0$").scale(.6).move_to(invleadloc-[.5,.25,0])
         self.play(Write(vnoninv), Write(iinv))
 
-        kcl = Tex(r"$\frac{V_s-v_-}{R_1} + \frac{V_o-v_-}{R_2} = i_-$").scale(.75).next_to()
+        kcl = Tex(r"$\frac{V_s-v_-}{R_1} + \frac{V_o-v_-}{R_2} = i_-$").scale(.75).next_to(title, DOWN, buff=.2).to_edge(RIGHT)
+        kcl2 = Tex(r"$\frac{V_s}{R_1} + \frac{V_o}{R_2}$").scale(.75).next_to(kcl, DOWN, buff=.2).to_edge(RIGHT)
+        kcl3 = Tex(r"Gain = $\frac{V_o}{V_s} = -\frac{R_2}{R_1}$").scale(.75).next_to(kcl2, DOWN, buff=.2).to_edge(RIGHT)
+        self.play(Write(kcl))
+        self.play(Write(kcl2))
+        self.play(Write(kcl3))
+        self.next_slide()
