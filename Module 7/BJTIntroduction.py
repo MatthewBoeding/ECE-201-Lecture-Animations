@@ -20,13 +20,14 @@ class BJTIntroduction(Slide):
     def show_npn(self):
         title = Tex(r"NPN BJT").to_edge(UP)
         self.play(Write(title))
+        self.next_slide()
         # === Internal Layers ===
         n_left = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=GRAY, fill_opacity=0.5).shift(LEFT * 2)
         p_mid = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=RED, fill_opacity=0.5).next_to(n_left, RIGHT, buff=0)
         n_right = Rectangle(width=1.2, height=1.5, color=WHITE, fill_color=GRAY, fill_opacity=0.5).next_to(p_mid, RIGHT, buff=0)
 
-        emitter_label = Tex("Emitter").scale(0.5).next_to(n_left, LEFT)
-        collector_label = Tex("Collector").scale(0.5).next_to(n_right, RIGHT)
+        emitter_label = Tex("Collector").scale(0.5).next_to(n_left, LEFT)
+        collector_label = Tex("Emitter").scale(0.5).next_to(n_right, RIGHT)
         base_label = Tex("Base").scale(0.5).next_to(p_mid, DOWN)
 
         letters = VGroup(

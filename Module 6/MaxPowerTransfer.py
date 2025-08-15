@@ -48,7 +48,7 @@ class MaxPowerTransfer(Slide):
         self.play(circuit.animate.to_edge(LEFT))
         # Step 1: Define power equation
         eq1 = MathTex(
-            r"P = \frac{V_{th}^2 R_L}{(R_{th} + R_L)^2}"
+            r"P_{R_L} = \frac{V_{th}^2 R_L}{(R_{th} + R_L)^2}"
         ).scale(0.7).next_to(title, DOWN, buff=0.2).to_edge(RIGHT)
         self.play(Write(eq1))
         self.wait()
